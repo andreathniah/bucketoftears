@@ -5,13 +5,13 @@
 **Date:** 14/09/2019 - 18/09/2019  
 **Team**: BoT
 
-![Results](.\writeup\Results.PNG)
+![Results](./writeup/Results.PNG)
 
 ### Flag Queen
 
 Upon registration, all participants receive a card that looks like this.
 
-![FlagQueen](.\writeup\FlagQueen.png)
+![FlagQueen](./writeup/FlagQueen.png)
 
 The line at the bottom looks weird but `://` and `.klm/` was a dead giveaway that it was a URL link. `ROT13 cipher` easily reveal `uggcf://qnlbsfurphevgl.klm` to be `https://dayofshecurity.xyz`
 
@@ -27,17 +27,17 @@ The line at the bottom looks weird but `://` and `.klm/` was a dead giveaway tha
 
 With the challenge named [Little Bobby](https://xkcd.com/327/), there was little to no doubt that this challenge requires some form of SQL injection. With that in mind, I did a quick survey on the website in general. It only consist of a normal login page with some form of validation being enforced. Poking around, I noticed that any attempt to submit data from the frontend would have their data sanitized with the `serialize()` command.
 
-![BobbyTables_Javascript](.\writeup\BobbyTables_Javascript.PNG)
+![BobbyTables_Javascript](./writeup/BobbyTables_Javascript.PNG)
 
 Nevertheless, I tried the usual SQL injection statement to see if the login form is vulnerable. Lo and behold, it is. Now that I know that the site vulnerable from the frontend attack vector, I proceed to check the backend too.
 
-![BobbyTables_FatalError](.\writeup\BobbyTables_FatalError.PNG)
+![BobbyTables_FatalError](./writeup/BobbyTables_FatalError.PNG)
 
 Copying the request I made from the `Network` panel as a `curl` request, I tried submitting `'1 or 1=1--` as the injection statement. Nope, that didn't work out -- I got the same fatal error as above. When I changed the injection statement to `' or 1=1--` though, I got something different, which unfortunately, is not the flag. _Whyyyyy?_
 
-![BobbyTables_Failcurl](.\writeup\BobbyTables_Failcurl.PNG)
+![BobbyTables_Failcurl](./writeup/BobbyTables_Failcurl.PNG)
 
-![BobbyTables_curl](.\writeup\BobbyTables_Successfulcurl.PNG)
+![BobbyTables_curl](./writeup/BobbyTables_Successfulcurl.PNG)
 
 The answer lies in how the `curl` request was constructed. The `curl` I used contains a `Cookie` value specific to the browser session hence even if the injection were successful, I wouldn't have been able to see anything within the terminal. I actually needed to go back to my browser that _hasn't been closed_ and _refresh_ the page to see the flag!
 
@@ -47,7 +47,7 @@ curl "https://chmodxx.net/dos/submit.php"
 -H "Cookie: PHPSESSID=5uj69calgmr27fk839lo33hc80" -H "Connection: keep-alive" -H "DNT: 1" --data "email=%27%20or%201%3D1--&password=sadfsdf" --compressed
 ```
 
-![BobbyTables_Admin](.\writeup\BobbyTables_Admin.PNG)
+![BobbyTables_Admin](./writeup/BobbyTables_Admin.PNG)
 
 **Flag: {FLAG:AND1HOPEUVELEARNED2SANITIZEYOURINPUT5}**
 
@@ -61,7 +61,7 @@ curl "https://chmodxx.net/dos/submit.php"
 
 Googling `vserver` reveals that this is just a term for virtual private server like Digital Ocean, Heroku etc. With the challenge description in mind, I went ahead to do a reverse lookup on the URL given via [Shodan.io](https://www.shodan.io/host/142.93.151.96).
 
-Right off the bat, I saw something interesting - the IP address `142.93.151.96` actually has its hostname set as `y2mk.cc`. Several ports are also opened: 22, 80, 443, 8443. This result coincides with what I would see if I were to run [nmap](.\source\easteregghunt\y2mk.nmap) using `nmap -sc -sV -oA y2mk 142.93.151.96`
+Right off the bat, I saw something interesting - the IP address `142.93.151.96` actually has its hostname set as `y2mk.cc`. Several ports are also opened: 22, 80, 443, 8443. This result coincides with what I would see if I were to run [nmap](./source/easteregghunt/y2mk.nmap) using `nmap -sc -sV -oA y2mk 142.93.151.96`
 
 Visiting `y2mk.cc` tells me that I am on the correct path:
 
@@ -73,15 +73,15 @@ Here comes the confusing part - `curl` commands.
 
 `curl -i 142.93.151.96:443` returns a `400 Bad Request` because `The plain HTTP request was sent to HTTPS port`. This was weird, given that `nmap` clearly tells says that I should be seeing what `y2mk.cc` displays - after all, the value of `http-title` is `Halfway there`.
 
-![EasterEggHunt_nmap_443&8443](.\writeup\EasterEggHunt_nmap_443&8443.PNG)
+![EasterEggHunt_nmap_443&8443](./writeup/EasterEggHunt_nmap_443&8443.PNG)
 
 What is going on here? The key lies in how webservers serves their content. In the current internet where multiple domains can exist in one IP address, there is a need for servers like `nginx` to be able to serve different contents to different domain names. How this is carried out is done via the `host` attribute in the request header.
 
 One thing to note is that in _this_ server, IP address and domain names are considered to be different thing - despite resolving into the same thing - and hence will serve different content. This makes sense considering the previous `curl` error message says the server would port forward any request to `https`. Inputting `https://y2mk.cc:8443` as the curl parameter would have revealed the flag.
 
-![EasterEggHunt_IPcurl](.\writeup\EasterEggHunt_IPcurl.PNG)
+![EasterEggHunt_IPcurl](./writeup/EasterEggHunt_IPcurl.PNG)
 
-![EasterEggHunt_DomainCurl](.\writeup\EasterEggHunt_DomainCurl.PNG)
+![EasterEggHunt_DomainCurl](./writeup/EasterEggHunt_DomainCurl.PNG)
 
 **Flag: Please don't portscan other people's servers.**
 
@@ -91,7 +91,7 @@ One thing to note is that in _this_ server, IP address and domain names are cons
 
 A simple `ls -la` showed that the image file contains `36382` bytes and that's _huge_. Unfortunately, `file flag.png` doesn't reveal anything amiss -- what about `binwalk`?
 
-![Stegosauras_Binwalk](.\writeup\Stegosauras_Binwalk.PNG)
+![Stegosauras_Binwalk](./writeup/Stegosauras_Binwalk.PNG)
 
 Seems that a `zip` file is hidden behind the `png` image, how sneaky. Unzipping it gave me the image containing the flag.
 
@@ -99,7 +99,7 @@ Seems that a `zip` file is hidden behind the `png` image, how sneaky. Unzipping 
 
 ### [Forensics] An Image is Worth 16 Kilobits
 
-> [image.jpg](.\source\imageworth.jpg)
+> [image.jpg](./source/imageworth.jpg)
 
 Same as before, `ls -la` reveals that this is definitely a case of steganography. This time, I used `file image.jpg` just to check if the file type is as what the filename claims to be, and oh, something looks interesting.
 
@@ -117,9 +117,9 @@ $ echo "e2ZsYWc6NjFhM2NlNDlmYTAyMjkwZjIyYzc1MmM2YjRiZmZiZmRmY2FhYTQ3NDI4NTc4MWU1
 
 #### Alternatives: `exiftool image.jpg`
 
-`exiftool` is at times, more useful than `file` because it displays more information that might aid us.
+`exiftool` is at times, more useful than `file` because it displays more information.
 
-![ImageWorth_exiftool](.\writeup\ImageWorth_exiftool.PNG)
+![ImageWorth_exiftool](./writeup/ImageWorth_exiftool.PNG)
 
 **Flag: {flag:61a3ce49fa02290f22c752c6b4bffbfdfcaaa474285781e57}**
 
@@ -127,13 +127,13 @@ $ echo "e2ZsYWc6NjFhM2NlNDlmYTAyMjkwZjIyYzc1MmM2YjRiZmZiZmRmY2FhYTQ3NDI4NTc4MWU1
 
 > The challenge category is accurate.
 >
-> [flag.jpg](.\source\reversing101\flag.jpg)
+> [flag.jpg](./source/reversing101/flag.jpg)
 
 I quite like this challenge although it took me more than half a day to realize that the clue was literal.
 
 I started off by using `file` to determine the file type. The command returns a `flag.jpg: data` which the [man page](http://man7.org/linux/man-pages/man1/file.1.html) of the `file` command clarifies that it cannot identify the contents. This lead me to investigate the hex dump of the file using `xxd flag.png | head`. We can see that the hex starts of with the consistent pattern of `...(`
 
-![Reversing101_xxd_flag_head](.\writeup\Reversing101_xxd_flag_head.PNG)
+![Reversing101_xxd_flag_head](./writeup/Reversing101_xxd_flag_head.PNG)
 
 This clearly meant that the file in question is not a `jpg` file -- or anything type of file in fact. A proper image file such as this type should have the following sequences:
 
@@ -141,7 +141,7 @@ This clearly meant that the file in question is not a `jpg` file -- or anything 
 00000000: ffd8 ffe0 0010 4a46 4946 0001            ......JFIF..
 ```
 
-![Reversing101_xxd_tail](.\writeup\Reversing101_xxd_flag_tail.PNG)
+![Reversing101_xxd_tail](./writeup/Reversing101_xxd_flag_tail.PNG)
 
 It was only when I printed out the tails of the hex dump when I noticed something _realllyyy_ interesting. The bytes are actually reversed! Rearranging `FIFJ......` would become `......JFIF`, the proper sequence of a `jpg` file. Wow.
 
@@ -161,7 +161,7 @@ with open("flag.jpg", "rb") as file:
         newfile.write(bytes_rev)
 ```
 
-Run the script and a new file [reversed.jpg](.\source\reversing101\reversed.jpg) would be created. This is the flag!
+Run the script and a new file [reversed.jpg](./source/reversing101/reversed.jpg) would be created. This is the flag!
 
 **Flag: {flag-into_to_reversing}**
 
@@ -174,7 +174,7 @@ References:
 
 > Why is he sad :( ? binwalk, sleuthkit is valuable here.
 >
-> [shecurity.img](.\source\kittyforensics\shecurity.img)
+> [shecurity.img](./source/kittyforensics/shecurity.img)
 
 I start off with using `fls shecurity.img` to recursively list all files and directories and determine what was within and what has been deleted from `img` file.
 
@@ -207,7 +207,7 @@ steghide: the file format of the file "lonelykitten.png" is not supported.
 
 Aww man, what's going on? Googling around, I realized that maybe `foremost` might be what I need, given that I must to crave out `lonelykitten.png` to find out what's wrong with it. With the command `foremost shecurity.img`, I obtained an folder called `output`. Lo and behold, traversing down the folder brings me to `00016546.jpg` that clearly says: `Second part is "Teefies"`
 
-![KittyForensics_HappyKitten](.\writeup\KittyForensics_HappyKitten.jpg)
+![KittyForensics_HappyKitten](./writeup/KittyForensics_HappyKitten.jpg)
 
 Concatenating both parts of the message would reveal the flag: `SearchingForTeefies`
 
@@ -219,12 +219,12 @@ This command would crave out all the files within `shecurity.img` into `_shecuri
 
 References:
 
-- [CSAW 2016 - Clams Don't Dance]([https://github.com/krx/CTF-Writeups/blob/master/CSAW%2016%20Quals/for100%20-%20Clams%20Dont%20Dance/README.md](https://github.com/krx/CTF-Writeups/blob/master/CSAW 16 Quals/for100 - Clams Dont Dance/README.md))
+- [CSAW 2016 - Clams Don't Dance](https://github.com/krx/CTF-Writeups/blob/master/CSAW%2016%20Quals/for100%20-%20Clams%20Dont%20Dance/README.md)
 - [StackOverflow - binwalk to extract all files](https://stackoverflow.com/questions/36530643/use-binwalk-to-extract-all-files/53889479#53889479)
 
 ### [Crypto] All Your Base Are Belong To Us
 
-> [flag.py](.\source\basebelongs.py)
+> [flag.py](./source/basebelongs.py)
 
 ```python
 def encode(s):
@@ -274,13 +274,13 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/
 
 Using that as the formula, the values was then pumped into a [base64 decoder](<https://gchq.github.io/CyberChef/#recipe=From_Base64('',true)>) to get the flag.
 
-![BaseBelongsToUs_flag](.\writeup\BaseBelongsToUs_flag.PNG)
+![BaseBelongsToUs_flag](./writeup/BaseBelongsToUs_flag.PNG)
 
 **Flag: {flag-quite_the_alphabet}**
 
 ### [Crypto] Le Chiffre
 
-> [flag.py](.\source\lechiffre.py)
+> [flag.py](./source/lechiffre.py)
 
 ```python
 import string
@@ -316,7 +316,7 @@ if __name__ == "__main__":
 
 Solved by a teammate, the challenge names directs me to the `Le Chiffre cipher`, also known as the `Vigenère cipher`. Using an [online tool](https://cryptii.com/pipes/vigenere-cipher) with `shecurity` as the key and `{xsei-nym_cmq_vj_elpxmm}` as the ciphertext, the flag is obtained.
 
-![LeChiffre_flag](.\writeup\LeChiffre_flag.PNG)
+![LeChiffre_flag](./writeup/LeChiffre_flag.PNG)
 
 **Flag: {flag-the_joy_of_crypto}**
 
@@ -330,7 +330,7 @@ Solved by a teammate, the challenge names directs me to the `Le Chiffre cipher`,
 
 The challenge title literally directed me to carry out XOR brute force operation. [Online tools](https://gchq.github.io/CyberChef/) are rather handy for this type of operations.
 
-![XORuteforce](.\writeup\XORuteforce.PNG)
+![XORuteforce](./writeup/XORuteforce.PNG)
 
 **Flag: {flag: Privacy Is A Myth}**
 
@@ -338,15 +338,15 @@ The challenge title literally directed me to carry out XOR brute force operation
 
 > Beep Boop
 >
-> [TeeIX.wav](.\source\TeelX.wav)
+> [TeeIX.wav](./source/TeelX.wav)
 
 Given that this is an audio steganography (_coz what else can it be_), I first thought that it might be SSTV related. So I played the audio out in the open and started recording with a tried-and-trusted mobile app, `Robot36`.
 
-![TeelX_Robot36](.\writeup\TeelX_Robot36.jpg)
+![TeelX_Robot36](./writeup/TeelX_Robot36.jpg)
 
 Nope, the main display didn't convert into an image, but what's interesting is the bottom right panel where I can see a series of dots. That brings me to pump the audio into `Sonic Visualiser` and I added a spectrogram into the audio via `Pane > Add Spectrogram`.
 
-![TeelX_SonicVisualiser](.\writeup\TeelX_SonicVisualiser.PNG)
+![TeelX_SonicVisualiser](./writeup/TeelX_SonicVisualiser.PNG)
 
 Given the lack of dots and dashes, I ruled out Morse code. Playing the audio multiple times though, I came to realize that it sounded suspiciously similar to the touch tone dialing sequence we had in our pre-smartphone era (_thank god I'm not that young_). Googling brings me to the term [Dual Tone Multi Frequency (DTMF)](https://en.wikipedia.org/wiki/Dual-tone_multi-frequency_signaling). Isolating the tone [manually](https://ctftime.org/writeup/16030) was complicated, but thankfully, I found [dtmf-detect](https://unframework.github.io/dtmf-detect/#/grid) and was able to extract the tone to the following number sequence:
 
@@ -356,7 +356,7 @@ Given the lack of dots and dashes, I ruled out Morse code. Playing the audio mul
 
 I then used an [online decoder](https://www.dcode.fr/multitap-abc-cipher) to solve this `Multi-tap Cipher` and obtain the flag.
 
-![TeelX_Dcode_MultiTap](.\writeup\TeelX_Dcode_MultiTap.PNG)
+![TeelX_Dcode_MultiTap](./writeup/TeelX_Dcode_MultiTap.PNG)
 
 **Flag: FLAG LISTEN CLOSELY**
 
@@ -372,7 +372,7 @@ Gambling on the assumption that numbers with `-` preceding the numbers are subtr
 
 Here's a manual way of how I did it:
 
-![ACSII4Change_flag](.\writeup\ACSII4Change_flag.jpg)
+![ACSII4Change_flag](./writeup/ACSII4Change_flag.jpg)
 
 **Flag: {flag: deltas diligently dispel doubts}**
 
@@ -382,9 +382,9 @@ Here's a manual way of how I did it:
 >
 > ....-----.-....-.... ..---.----.....-.... -......---....-.---- ..---...--...------.----. .----....-...------.....- .-------.......-----..--- ----.-------.......- ..---.-------.....--...-- .-------..--...---..----. ..---.----...--.....---.. ...--....--.... ...-----..----...--- .--------.-----....-..... ..---...--....-.----....- .-----....--...-----..... ..------......-----.
 >
-> [MorseCode.png](.\writeup\RemainFriends_MorseCode.jpg)
+> [MorseCode.png](./writeup/RemainFriends_MorseCode.jpg)
 
-![RemainFriends_MorseCode](.\writeup\RemainFriends_MorseCode.jpg)
+![RemainFriends_MorseCode](./writeup/RemainFriends_MorseCode.jpg)
 
 Using the Morse code numerals guide given, I inferred that I needed to split the given chunk of Morse into groups of five and convert them into ASCII text.
 
@@ -425,6 +425,6 @@ Now that I know that, I then `modulo` all converted numbers by `256` individuall
 
 With an online [decimals to ascii decoder](https://tomeko.net/online_tools/dec_to_ascii.php?lang=en), I got the flag!
 
-![RemainFriends_DecimalsToAscii](.\writeup\RemainFriends_DecimalsToAscii.PNG)
+![RemainFriends_DecimalsToAscii](./writeup/RemainFriends_DecimalsToAscii.PNG)
 
 **Flag: FrIenZ4evA!**
