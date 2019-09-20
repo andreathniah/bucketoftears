@@ -1,0 +1,47 @@
+# Nmap 7.70 scan initiated Sat Sep 14 21:40:18 2019 as: nmap -sV -sC -oA y2mk 142.93.151.96
+Nmap scan report for y2mk.cc (142.93.151.96)
+Host is up (0.063s latency).
+Not shown: 996 filtered ports
+PORT     STATE SERVICE  VERSION
+22/tcp   open  ssh      OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 99:91:6a:f8:75:e0:a4:f5:68:61:32:be:b4:0d:ba:a3 (RSA)
+|   256 e4:00:eb:ab:a2:0b:92:99:7b:ea:93:c4:ab:20:e7:59 (ECDSA)
+|_  256 22:91:d8:19:1a:6f:0b:85:e4:b7:34:64:18:b1:a2:56 (ED25519)
+80/tcp   open  http     nginx 1.14.0 (Ubuntu)
+|_http-server-header: nginx/1.14.0 (Ubuntu)
+|_http-title: Did not follow redirect to https://y2mk.cc/
+443/tcp  open  ssl/http nginx 1.14.0 (Ubuntu)
+| http-robots.txt: 1 disallowed entry 
+|_/
+|_http-server-header: nginx/1.14.0 (Ubuntu)
+|_http-title: Halfway there
+| ssl-cert: Subject: commonName=dayofshecurity.xyz
+| Subject Alternative Name: DNS:dayofshecurity.xyz, DNS:y2mk.cc
+| Not valid before: 2019-08-15T23:17:48
+|_Not valid after:  2019-11-13T23:17:48
+|_ssl-date: ERROR: Script execution failed (use -d to debug)
+| tls-alpn: 
+|   h2
+|_  http/1.1
+| tls-nextprotoneg: 
+|   h2
+|_  http/1.1
+8443/tcp open  ssl/http nginx 1.14.0 (Ubuntu)
+| http-robots.txt: 1 disallowed entry 
+|_/
+|_http-server-header: nginx/1.14.0 (Ubuntu)
+|_http-title: Easter in Fall
+| ssl-cert: Subject: commonName=dayofshecurity.xyz
+| Subject Alternative Name: DNS:dayofshecurity.xyz, DNS:y2mk.cc
+| Not valid before: 2019-08-15T23:17:48
+|_Not valid after:  2019-11-13T23:17:48
+|_ssl-date: ERROR: Script execution failed (use -d to debug)
+| tls-alpn: 
+|_  http/1.1
+| tls-nextprotoneg: 
+|_  http/1.1
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat Sep 14 21:41:25 2019 -- 1 IP address (1 host up) scanned in 67.32 seconds
