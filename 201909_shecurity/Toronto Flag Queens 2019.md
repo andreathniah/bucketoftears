@@ -17,7 +17,7 @@ The line at the bottom looks weird but `://` and `.klm/` was a dead giveaway tha
 
 #### Alternatives by [Lookout](https://dayofshecurity.xyz/writeups/vvv):
 
-The most obvious way to solve this puzzle is a "known cleartext" approach. Since punctuation characters were not encrypted (I am using the word "encryption" loosely here as the Caesar Cipher would hardly qualify as such by today's standards) the challenge is immediately recognizable as a URL. Seeing the two `g` in the challenge representing `t` in `https` points at a simple substitution cipher. If we write down the alphabet with known substitutions we get:
+The most obvious way to solve this puzzle is a "known cleartext" approach. Since punctuation characters were not "encrypted" -  Caesar Cipher would hardly qualify as such by today's standards - the challenge is immediately recognizable as a URL. Seeing the two `g` in the challenge representing `t` in `https` points at a simple substitution cipher. If we write down the alphabet with known substitutions we get:
 
 ```
 abcdefghijklmnopqrstuvwxyz
@@ -32,6 +32,12 @@ It is not a great leap from here to recognize that the letters in the bottom row
 ```
 
 **Flag: https://dayofshecurity.xyz**
+
+
+
+---
+
+
 
 ### [Web] Oh, yes. Little Bobby Tables we call him
 
@@ -66,6 +72,282 @@ curl "https://chmodxx.net/dos/submit.php"
 ![BobbyTables_Admin](./writeup/BobbyTables_Admin.PNG)
 
 **Flag: {FLAG:AND1HOPEUVELEARNED2SANITIZEYOURINPUT5}**
+
+
+
+---
+
+### [Reverse Engineering] Call the Doctor
+
+> The binary needs some work to make it spit out the flag
+>
+> [ flag.exe](./source/callthedoctor.exe)
+
+
+
+#### Alternatives by [Lookout](https://dayofshecurity.xyz/writeups/doctor):
+
+We are given an `EXE` file that when run simply prints "Key is wrong" and exits. When we do `file flag.exe` we can see it's an x86 executable `flag.exe: PE32 executable (console) Intel 80386, for MS Windows`. We need to open this file in a disassembler to get a better picture. When doing so we will see:
+
+![CallTheDoctor_IDA](./writeup/CallTheDoctor_IDA.png)
+
+Looking at this disassembly we can see a jump of interest:
+
+```
+mov     byte ptr [esp+2Bh], 1
+[...]
+cmp     byte ptr [esp+2Bh], 0Fh
+jnz     short loc_401444
+```
+
+We compare `[esp+2Bh]` to `0xF` and if they do not match we jump to a branch that prints "Key is wrong" and exits. Since we are setting this address to be `0x1`, the comparison will never match and we will always jump to the same branch. The other branch is where we want to be.
+
+One way to ensure we arrive at the other branch is to patch the binary to perform a `Jump If Zero (jz)` instead of doing a `Jump If Not Zero (jnz)`. To accomplish this we would have to change the instruction from `jnz (0x75)` to `jz (0x74)` -- refer [this](http://faydoc.tripod.com/cpu/jnz.htm) for more information on these codes.
+
+However this will not lead to the flag. If we look on the right side of the disassembly we can see that `[esp+2Bh]` is being used in some sort of loop that includes xor instructions. We may have arrived at the right branch but we are trying to xor decrypt the flag using the incorrect value. Instead we need to arrive at the branch with the proper value in `[esp+2Bh]`. Since the program checks for this value to be `0xF` we can patch the program to set the variable to 0xF, `mov byte ptr [esp+2Bh], 0Fh`.
+
+After applying this patch and running the patched `EXE` we get the output we wanted: `Correct! Flag: {flag-is_this_patchwork}\n`
+
+**Flag: {flag-is_this_patchwork}**
+
+
+
+---
+
+
+
+### [Reverse Engineering] Not the Up eXpress
+
+> Hackers must see underneath the underneath...
+>
+> [ doesThisAddUp.exe](./source/upexpress.exe)
+
+
+
+#### Alternatives by [Lookup](https://dayofshecurity.xyz/writeups/upx):
+
+The challenge presents a PE to download and no further clues apart from the title.
+The title capitalizes "UP" and "X" and suggests this challenge doesn't have anything to do with Toronto's nicest train.
+
+As usual when dealing with files from a CTF, we first check out what the file is with the `file` utility:
+
+```
+$ file doesThisAddUp.exe 
+doesThisAddUp.exe: PE32 executable (console) Intel 80386, for MS Windows, UPX compressed
+```
+
+This tells us the file is a Windows executable and is also "UPX compressed" which matches with what is already hinted at by the title.
+
+UPX is an open-source "[packer](https://en.wikipedia.org/wiki/UPX)". Packers are utilities that can compress and/or obfuscate another program in such a way that the original program is functionally equivalent but the actual bytes of the program are different. Therefore, to see the original program we must first unpack it from the executable we downloaded. After installing the freely available UPX utilities:
+
+```
+upx -d doesThisAdUp.exe -o /tmp/original.exe
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2018
+UPX 3.95        Markus Oberhumer, Laszlo Molnar & John Reiser   Aug 26th 2018
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+upx: mod: CantUnpackException: header corrupted 3
+
+Unpacked 0 files.
+```
+
+That didn't work! The utility gave up seemingly due to a corrupt header, `header corrupted 3`. UPX is open source, so we can get its source code and narrow down exactly which conditions would cause such an error.
+
+```
+upx-3.95-src/src/packhead.cpp-
+upx-3.95-src/src/packhead.cpp-    // check header_checksum
+upx-3.95-src/src/packhead.cpp-    if (version > 9)
+upx-3.95-src/src/packhead.cpp-        if (p[size - 1] != get_packheader_checksum(p, size - 1))
+upx-3.95-src/src/packhead.cpp:            throwCantUnpack("header corrupted 3");
+upx-3.95-src/src/packhead.cpp-
+upx-3.95-src/src/packhead.cpp-    if (c_len < 2 || u_len < 2 || !mem_size_valid_bytes(c_len) || !mem_size_valid_bytes(u_len))
+upx-3.95-src/src/packhead.cpp-        throwCantUnpack("header corrupted 4");
+upx-3.95-src/src/packhead.cpp-    //
+```
+
+Our error looks like it's caused by a bad `packheader_checksum`.
+
+We now have a couple options for how to proceed. We can examine the code to learn how the checksum is calculated and repair the file, or we can modify the source code to ignore this checksum error. The latter approach seems fastest.
+
+```
+$ grep -RC 4 "header corrupted 3"
+
+upx-3.95-src/src/packhead.cpp-
+upx-3.95-src/src/packhead.cpp-    // check header_checksum
+upx-3.95-src/src/packhead.cpp-//  if (version > 9) {}
+upx-3.95-src/src/packhead.cpp-//        if (p[size - 1] != get_packheader_checksum(p, size - 1))
+upx-3.95-src/src/packhead.cpp://            throwCantUnpack("header corrupted 3");
+upx-3.95-src/src/packhead.cpp-
+upx-3.95-src/src/packhead.cpp-    if (c_len < 2 || u_len < 2 || !mem_size_valid_bytes(c_len) || !mem_size_valid_bytes(u_len))
+upx-3.95-src/src/packhead.cpp-        throwCantUnpack("header corrupted 4");
+upx-3.95-src/src/packhead.cpp-    //
+```
+
+The `if` lines and the exception are all commented out. Let's compile the utility and see what we get!
+
+```
+upx-3.95-src $ ./src/upx.out -d /tmp/doesThisAddUp.exe -o /tmp/original.exe
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2018
+UPX 3.95        Markus Oberhumer, Laszlo Molnar & John Reiser   Aug 26th 2018
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+upx.out: /tmp/mod: Exception: checksum error
+
+Unpacked 1 file: 0 ok, 1 error.
+
+$ file /tmp/original.exe
+/tmp/original.exe: cannot open `/tmp/original.exe' (No such file or directory)
+```
+
+Almost! We have a different error message now, but it seems like it's at least getting close. Although the output claims to have "Unpacked 1 file" the error still prevents it from being written to disk. Let's repeat our previous code editing with our new error message:
+
+```
+$ grep -RC 4 "checksum error"
+--
+upx-3.95-src/src/except.cpp-}
+upx-3.95-src/src/except.cpp-
+upx-3.95-src/src/except.cpp-void throwChecksumError()
+upx-3.95-src/src/except.cpp-{
+upx-3.95-src/src/except.cpp:    throw Exception("checksum error");
+upx-3.95-src/src/except.cpp-}
+upx-3.95-src/src/except.cpp-
+upx-3.95-src/src/except.cpp-void throwCompressedDataViolation()
+upx-3.95-src/src/except.cpp-{
+This requires a little more digging since we've found a function that throws the exception rather than the exact spot the exception is thrown.
+
+$ grep -Rl throwChecksumError | grep -v "\.o"
+upx-3.95-src/src/except.cpp
+upx-3.95-src/src/p_lx_elf.cpp
+upx-3.95-src/src/p_unix.cpp
+upx-3.95-src/src/packer.cpp
+upx-3.95-src/src/p_lx_interp.cpp
+upx-3.95-src/src/except.h
+```
+
+The `.o` files are leftovers from the compilation process so we can ignore those results.
+As we are dealing with a Windows PE file, we can ignore the unix and elf results as well. This leaves us with `packer.cpp`:
+
+```
+$ grep -RC4 throwChecksumError upx-3.95-src/src/packer.cpp 
+    if (verify_checksum)
+    {
+        adler = upx_adler32(in, ph.c_len, ph.saved_c_adler);
+        if (adler != ph.c_adler)
+            throwChecksumError();
+    }
+
+    // decompress
+    if (ph.u_len < ph.c_len) {
+--
+        if (ft)
+            ft->unfilter(out, ph.u_len);
+        adler = upx_adler32(out, ph.u_len, ph.saved_u_adler);
+        if (adler != ph.u_adler)
+            throwChecksumError();
+    }
+}
+```
+
+There are two places that need a little editing before we can try to recompile and decompress:
+
+```
+$ grep -RC4 throwChecksumError upx-3.95-src/src/packer.cpp 
+    if (verify_checksum)
+    {
+        adler = upx_adler32(in, ph.c_len, ph.saved_c_adler);
+        if (adler != ph.c_adler)
+            {}//throwChecksumError();
+    }
+
+    // decompress
+    if (ph.u_len < ph.c_len) {
+--
+        if (ft)
+            ft->unfilter(out, ph.u_len);
+        adler = upx_adler32(out, ph.u_len, ph.saved_u_adler);
+        if (adler != ph.u_adler)
+            {}//throwChecksumError();
+    }
+}
+```
+
+And then to test it...
+
+```
+$ ./src/upx.out -d /tmp/doesThisAddUp.exe -o /tmp/original.exe
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2018
+UPX 3.95        Markus Oberhumer, Laszlo Molnar & John Reiser   Aug 26th 2018
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+     46942 <-     34654   73.82%    win32/pe     original.exe
+
+Unpacked 1 file.
+```
+
+Success! Now we have a regular PE on our hands. If we have a Windows VM handy we can try to run the program. It doesn't seem to do much but print out a different random message every second. These messages mostly look like they're from a Magic 8-Ball.
+
+We can begin to do some more analysis on the file itself. A good place to start is by running the `strings` utility. This results in 1335 lines so we'll have to narrow our search down a bit. For a start, we can try to locate those Magic 8-Ball strings and search from there:
+
+```
+$ strings /tmp/original.exe  | grep "Outlook good." -C 20
+MZVS
+%|a@
+%ta@
+%pa@
+%la@
+%ha@
+%da@
+%`a@
+%\a@
+%Pa@
+keep looking!
+not here...
+hmmm.. nope!
+It is certain.
+It is decidedly so.
+Without a doubt.
+Yes - definitely.
+You may rely on it.
+As I see it, yes.
+Most likely.
+Outlook good.
+Yes.
+Signs point to yes.
+Reply hazy, try again.
+Ask again later.
+Better not tell you now.
+Cannot predict now.
+Concentrate and ask again.
+Don't count on it.
+My reply is no.
+My sources say no.
+Outlook not so good.
+Very doubtful.
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+{flag:NotAllPackersAreFromGreenBay}
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Unknown error
+_matherr(): %s in %s(%g, %g)  (retval=%g)
+Argument domain error (DOMAIN)
+Argument singularity (SIGN)
+Overflow range error (OVERFLOW)
+```
+
+And there's our flag!
+
+**Flag: {flag:NotAllPackersAreFromGreenBay}**
+
+
+
+---
+
+
 
 ### [Hunting] Easter Egg Hunt
 
@@ -162,6 +444,12 @@ Conveniently, nap also performs a reverse DNS lookup on the scanned IP address t
 
 **Flag: Please don't portscan other people's servers.**
 
+
+
+---
+
+
+
 ### [Forensics] Not Quite A Stego-sauras
 
 > [flag.png]()
@@ -191,6 +479,12 @@ After extracting we get `flag.jpg` and can simply open it to view the flag: `{fl
 
 **Flag: {flag-some_bytes_are_magical}**
 
+
+
+---
+
+
+
 ### [Forensics] An Image is Worth 16 Kilobits
 
 > [image.jpg](./source/imageworth.jpg)
@@ -216,6 +510,12 @@ $ echo "e2ZsYWc6NjFhM2NlNDlmYTAyMjkwZjIyYzc1MmM2YjRiZmZiZmRmY2FhYTQ3NDI4NTc4MWU1
 ![ImageWorth_exiftool](./writeup/ImageWorth_exiftool.PNG)
 
 **Flag: {flag:61a3ce49fa02290f22c752c6b4bffbfdfcaaa474285781e57}**
+
+
+
+---
+
+
 
 ### [Forensics] Reversing 101
 
@@ -279,6 +579,12 @@ References:
 
 - [F1l3 M1X3R](https://dev.to/atan/solving-a-ctf-challenge-2nbp)
 - [SECCON CTF 2014: Reverse it](https://github.com/ctfs/write-ups-2014/tree/master/seccon-ctf-2014/reverse-it)
+
+
+
+---
+
+
 
 ### [Forensics] Sordid Sorting
 
@@ -361,6 +667,12 @@ $ cat /tmp/sordid.bytes | iconv -f EBCDIC-US -t ascii | base64 -d
 
 **Flag: {flag:HayThereNeedle}**
 
+
+
+---
+
+
+
 ### [Forensics] KittyForensics
 
 > Why is he sad :( ? binwalk, sleuthkit is valuable here.
@@ -412,6 +724,12 @@ References:
 
 - [CSAW 2016 - Clams Don't Dance](https://github.com/krx/CTF-Writeups/blob/master/CSAW%2016%20Quals/for100%20-%20Clams%20Dont%20Dance/README.md)
 - [StackOverflow - binwalk to extract all files](https://stackoverflow.com/questions/36530643/use-binwalk-to-extract-all-files/53889479#53889479)
+
+
+
+---
+
+
 
 ### [Crypto] All Your Base Are Belong To Us
 
@@ -519,6 +837,12 @@ print(flag)
 
 **Flag: {flag-quite_the_alphabet}**
 
+
+
+---
+
+
+
 ### [Crypto] Le Chiffre
 
 > [flag.py](./source/lechiffre.py)
@@ -573,6 +897,12 @@ Solved by a teammate, the challenge names directs me to the `Le Chiffre cipher`,
 We can implement the decryption function by changing a single line in the script: `c1 = (m1 + k1) % 26` to `c1 = (m1 - k1) % 26`. After changing this line we can call `encrypt(flag)` to receive `{flag-the_joy_of_crypto}`.
 
 **Flag: {flag-the_joy_of_crypto}**
+
+
+
+---
+
+
 
 ### [Crypto] XORuteforce
 
@@ -641,6 +971,12 @@ if name == 'main': main()
 
 **Flag: {flag: Privacy Is A Myth}**
 
+
+
+---
+
+
+
 ### [Misc] TeelX
 
 > Beep Boop
@@ -667,6 +1003,12 @@ I then used an [online decoder](https://www.dcode.fr/multitap-abc-cipher) to sol
 
 **Flag: FLAG LISTEN CLOSELY**
 
+
+
+---
+
+
+
 ### [Puzzle] ACSIIng For A Change
 
 > G 40 0 -11 -68 74 5 -13 -65 -1 91 -21 6 -11 6 -45 42 1 7 8 -19 18 -83 68 5 3 -3 -2 -2 9 6 -8 13 -89 68 5 10 -3 -11 7 -76 68 11 6 -19 18 -1 10
@@ -682,6 +1024,12 @@ Here's a manual way of how I did it:
 ![ACSII4Change_flag](./writeup/ACSII4Change_flag.jpg)
 
 **Flag: {flag: deltas diligently dispel doubts}**
+
+
+
+---
+
+
 
 ### [Puzzle] First Base
 
@@ -709,6 +1057,12 @@ kflag:The first things you notice is often important}
 ```
 
 **Flag: {flag: The first things you notice is often important}**
+
+
+
+---
+
+
 
 ### [Puzzle] Let's REMAIN friends
 
