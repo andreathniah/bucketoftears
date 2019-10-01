@@ -1,4 +1,4 @@
-## Toronto Flag Queens 2019
+# Toronto Flag Queens 2019
 
 **Event name:** Day of Shecurity Toronto 2019  
 **Location:** George Brown College  
@@ -7,7 +7,7 @@
 
 ![Results](./writeup/Results.PNG)
 
-### [Flag Queen] Veni, vidi, vici
+## [Flag Queen] Veni, vidi, vici
 
 Upon registration, all participants receive a card that looks like this.
 
@@ -17,7 +17,7 @@ The line at the bottom looks weird but `://` and `.klm/` was a dead giveaway tha
 
 #### Alternatives by [Lookout](https://dayofshecurity.xyz/writeups/vvv):
 
-The most obvious way to solve this puzzle is a "known cleartext" approach. Since punctuation characters were not "encrypted" -  Caesar Cipher would hardly qualify as such by today's standards - the challenge is immediately recognizable as a URL. Seeing the two `g` in the challenge representing `t` in `https` points at a simple substitution cipher. If we write down the alphabet with known substitutions we get:
+The most obvious way to solve this puzzle is a "known cleartext" approach. Since punctuation characters were not "encrypted" - Caesar Cipher would hardly qualify as such by today's standards - the challenge is immediately recognizable as a URL. Seeing the two `g` in the challenge representing `t` in `https` points at a simple substitution cipher. If we write down the alphabet with known substitutions we get:
 
 ```
 abcdefghijklmnopqrstuvwxyz
@@ -33,13 +33,9 @@ It is not a great leap from here to recognize that the letters in the bottom row
 
 **Flag: https://dayofshecurity.xyz**
 
-
-
 ---
 
-
-
-### [Web] Oh, yes. Little Bobby Tables we call him
+## [Web] Oh, yes. Little Bobby Tables we call him
 
 > The backend devs of this Super Secure Site (TM) thought they'd protected their users' personal data. But, they've missed some things.
 >
@@ -73,17 +69,13 @@ curl "https://chmodxx.net/dos/submit.php"
 
 **Flag: {FLAG:AND1HOPEUVELEARNED2SANITIZEYOURINPUT5}**
 
-
-
 ---
 
-### [Reverse Engineering] Call the Doctor
+## [Reverse Engineering] Call the Doctor
 
 > The binary needs some work to make it spit out the flag
 >
 > [ flag.exe](./source/callthedoctor.exe)
-
-
 
 #### Alternatives by [Lookout](https://dayofshecurity.xyz/writeups/doctor):
 
@@ -110,19 +102,13 @@ After applying this patch and running the patched `EXE` we get the output we wan
 
 **Flag: {flag-is_this_patchwork}**
 
-
-
 ---
 
-
-
-### [Reverse Engineering] Not the Up eXpress
+## [Reverse Engineering] Not the Up eXpress
 
 > Hackers must see underneath the underneath...
 >
-> [ doesThisAddUp.exe](./source/upexpress.exe)
-
-
+> [doesThisAddUp.exe](./source/upexpress.exe)
 
 #### Alternatives by [Lookup](https://dayofshecurity.xyz/writeups/upx):
 
@@ -132,7 +118,7 @@ The title capitalizes "UP" and "X" and suggests this challenge doesn't have anyt
 As usual when dealing with files from a CTF, we first check out what the file is with the `file` utility:
 
 ```
-$ file doesThisAddUp.exe 
+$ file doesThisAddUp.exe
 doesThisAddUp.exe: PE32 executable (console) Intel 80386, for MS Windows, UPX compressed
 ```
 
@@ -232,7 +218,7 @@ The `.o` files are leftovers from the compilation process so we can ignore those
 As we are dealing with a Windows PE file, we can ignore the unix and elf results as well. This leaves us with `packer.cpp`:
 
 ```
-$ grep -RC4 throwChecksumError upx-3.95-src/src/packer.cpp 
+$ grep -RC4 throwChecksumError upx-3.95-src/src/packer.cpp
     if (verify_checksum)
     {
         adler = upx_adler32(in, ph.c_len, ph.saved_c_adler);
@@ -255,7 +241,7 @@ $ grep -RC4 throwChecksumError upx-3.95-src/src/packer.cpp
 There are two places that need a little editing before we can try to recompile and decompress:
 
 ```
-$ grep -RC4 throwChecksumError upx-3.95-src/src/packer.cpp 
+$ grep -RC4 throwChecksumError upx-3.95-src/src/packer.cpp
     if (verify_checksum)
     {
         adler = upx_adler32(in, ph.c_len, ph.saved_c_adler);
@@ -343,13 +329,9 @@ And there's our flag!
 
 **Flag: {flag:NotAllPackersAreFromGreenBay}**
 
-
-
 ---
 
-
-
-### [Hunting] Easter Egg Hunt
+## [Hunting] Easter Egg Hunt
 
 > I wonder what else is going on on this vserver...
 >
@@ -444,13 +426,9 @@ Conveniently, nap also performs a reverse DNS lookup on the scanned IP address t
 
 **Flag: Please don't portscan other people's servers.**
 
-
-
 ---
 
-
-
-### [Forensics] Not Quite A Stego-sauras
+## [Forensics] Not Quite A Stego-sauras
 
 > [flag.png]()
 
@@ -479,13 +457,9 @@ After extracting we get `flag.jpg` and can simply open it to view the flag: `{fl
 
 **Flag: {flag-some_bytes_are_magical}**
 
-
-
 ---
 
-
-
-### [Forensics] An Image is Worth 16 Kilobits
+## [Forensics] An Image is Worth 16 Kilobits
 
 > [image.jpg](./source/imageworth.jpg)
 
@@ -511,13 +485,9 @@ $ echo "e2ZsYWc6NjFhM2NlNDlmYTAyMjkwZjIyYzc1MmM2YjRiZmZiZmRmY2FhYTQ3NDI4NTc4MWU1
 
 **Flag: {flag:61a3ce49fa02290f22c752c6b4bffbfdfcaaa474285781e57}**
 
-
-
 ---
 
-
-
-### [Forensics] Reversing 101
+## [Forensics] Reversing 101
 
 > The challenge category is accurate.
 >
@@ -580,13 +550,9 @@ References:
 - [F1l3 M1X3R](https://dev.to/atan/solving-a-ctf-challenge-2nbp)
 - [SECCON CTF 2014: Reverse it](https://github.com/ctfs/write-ups-2014/tree/master/seccon-ctf-2014/reverse-it)
 
-
-
 ---
 
-
-
-### [Forensics] Sordid Sorting
+## [Forensics] Sordid Sorting
 
 > Some of these bytes aren't like the others. Perhaps a lexical approach would work best.
 
@@ -667,13 +633,9 @@ $ cat /tmp/sordid.bytes | iconv -f EBCDIC-US -t ascii | base64 -d
 
 **Flag: {flag:HayThereNeedle}**
 
-
-
 ---
 
-
-
-### [Forensics] KittyForensics
+## [Forensics] KittyForensics
 
 > Why is he sad :( ? binwalk, sleuthkit is valuable here.
 >
@@ -725,13 +687,9 @@ References:
 - [CSAW 2016 - Clams Don't Dance](https://github.com/krx/CTF-Writeups/blob/master/CSAW%2016%20Quals/for100%20-%20Clams%20Dont%20Dance/README.md)
 - [StackOverflow - binwalk to extract all files](https://stackoverflow.com/questions/36530643/use-binwalk-to-extract-all-files/53889479#53889479)
 
-
-
 ---
 
-
-
-### [Crypto] All Your Base Are Belong To Us
+## [Crypto] All Your Base Are Belong To Us
 
 > [flag.py](./source/basebelongs.py)
 
@@ -837,13 +795,9 @@ print(flag)
 
 **Flag: {flag-quite_the_alphabet}**
 
-
-
 ---
 
-
-
-### [Crypto] Le Chiffre
+## [Crypto] Le Chiffre
 
 > [flag.py](./source/lechiffre.py)
 
@@ -898,13 +852,9 @@ We can implement the decryption function by changing a single line in the script
 
 **Flag: {flag-the_joy_of_crypto}**
 
-
-
 ---
 
-
-
-### [Crypto] XORuteforce
+## [Crypto] XORuteforce
 
 > Alice and Barbara are writing cryptic messages for each other. Barbara's trashcan has a left over of a torn paper that reads :
 >
@@ -971,13 +921,9 @@ if name == 'main': main()
 
 **Flag: {flag: Privacy Is A Myth}**
 
-
-
 ---
 
-
-
-### [Misc] TeelX
+## [Misc] TeelX
 
 > Beep Boop
 >
@@ -1003,13 +949,9 @@ I then used an [online decoder](https://www.dcode.fr/multitap-abc-cipher) to sol
 
 **Flag: FLAG LISTEN CLOSELY**
 
-
-
 ---
 
-
-
-### [Puzzle] ACSIIng For A Change
+## [Puzzle] ACSIIng For A Change
 
 > G 40 0 -11 -68 74 5 -13 -65 -1 91 -21 6 -11 6 -45 42 1 7 8 -19 18 -83 68 5 3 -3 -2 -2 9 6 -8 13 -89 68 5 10 -3 -11 7 -76 68 11 6 -19 18 -1 10
 >
@@ -1025,13 +967,9 @@ Here's a manual way of how I did it:
 
 **Flag: {flag: deltas diligently dispel doubts}**
 
-
-
 ---
 
-
-
-### [Puzzle] First Base
+## [Puzzle] First Base
 
 > [first_base.txt](./source/firstbase.txt)
 
@@ -1058,13 +996,9 @@ kflag:The first things you notice is often important}
 
 **Flag: {flag: The first things you notice is often important}**
 
-
-
 ---
 
-
-
-### [Puzzle] Let's REMAIN friends
+## [Puzzle] Let's REMAIN friends
 
 > Friends always give 0x100%
 >
