@@ -1,0 +1,4 @@
+# Nmap 7.70 scan initiated Sun Oct  6 15:19:02 2019 as: nmap -sC -sV -oA krasnikov krasnikov.hfctf.org
+Host: 35.236.192.109 (109.192.236.35.bc.googleusercontent.com)	Status: Up
+Host: 35.236.192.109 (109.192.236.35.bc.googleusercontent.com)	Status: Up
+# Nmap done at Sun Oct  6 15:19:55 2019 -- 1 IP address (1 host up) scanned in 52.88 seconds

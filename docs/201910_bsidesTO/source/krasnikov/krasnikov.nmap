@@ -1,0 +1,8 @@
+# Nmap 7.70 scan initiated Sun Oct  6 15:19:02 2019 as: nmap -sC -sV -oA krasnikov krasnikov.hfctf.org
+Nmap scan report for krasnikov.hfctf.org (35.236.192.109)
+Host is up (0.00027s latency).
+rDNS record for 35.236.192.109: 109.192.236.35.bc.googleusercontent.com
+All 1000 scanned ports on krasnikov.hfctf.org (35.236.192.109) are filtered
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun Oct  6 15:19:55 2019 -- 1 IP address (1 host up) scanned in 52.88 seconds
