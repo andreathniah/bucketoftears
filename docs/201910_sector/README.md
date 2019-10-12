@@ -1,8 +1,14 @@
 # SecTor 2019 CTF
+**Event name**: SecTor 2019  
+**Location**: Metro Toronto Convention Centre  
+**Date**: 09/10/2019 - 10/10/2019  
+**Team**: Individual
 
 Upon registration, all attendees are given a physical copy of a pocket guide that details the conference details. Looking closely at one of the pages, we can see that a CTF is totally taking place!
 
 ![0_physicalpocketguide](./writeup/0_physicalpocketguide.jpg)
+
+## Flag 1
 
 Squinting at the far left of the image, we see a `base64` encoded string, *interesting*! Following the instructions on the page, I eventually found the *Nuix + Dolos Group* booth at Hall 700 and was given the link to the CTF platform: [sector2019ctf.online](sectorctf2019.online).
 
@@ -34,7 +40,7 @@ But that's okay, because clicking through other links on the webpage led us to y
 
 **Flag 1: SecTor[Go on till you come to the end, then stop.]**
 
-
+## Flag 2
 
 Based on the instructions on the first flag, we proceed to `sectorctf2019.online/knock/knock/packets.pcap` and were given a [`pcap`](./source/packets.pcap) file. As the extension suggests, its a `wireshark` file. Filtering the results for `http` and `http2`, we spotted something! It seems that our victim was trying to download an achieved file from `sectorctf2019.online/Doorknob.7z`. 
 
@@ -64,7 +70,7 @@ Yep, we got our flag!
 
 **Flag 2: SecTor[No, I do mean impassible. Nothing's impossible!]**
 
-
+## Flag 3
 
 Downloading `sectorctf2019.online/stage/B/binary.pdf`, we obtain a rather interesting [PDF file](./source/binary.pdf) -- we see a bunch of binary numbers! 
 
@@ -106,4 +112,4 @@ Password[Of c4bbag3s and k1ngs]
 The hurrier I go,
 the behinder I get.
 ```
-*Anddddd...* I officially gave up here. Let's hope someone wrote a writeup about this challenge! 
+*Anddddd...* I officially gave up here. Let's hope someone wrote a writeup about this challenge so I can figure out what I missed!
