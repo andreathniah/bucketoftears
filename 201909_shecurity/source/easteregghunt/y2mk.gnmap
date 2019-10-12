@@ -1,4 +1,0 @@
-# Nmap 7.70 scan initiated Sat Sep 14 21:40:18 2019 as: nmap -sV -sC -oA y2mk 142.93.151.96
-Host: 142.93.151.96 (y2mk.cc)	Status: Up
-Host: 142.93.151.96 (y2mk.cc)	Ports: 22/open/tcp//ssh//OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)/, 80/open/tcp//http//nginx 1.14.0 (Ubuntu)/, 443/open/tcp//ssl|http//nginx 1.14.0 (Ubuntu)/, 8443/open/tcp//ssl|http//nginx 1.14.0 (Ubuntu)/	Ignored State: filtered (996)
-# Nmap done at Sat Sep 14 21:41:25 2019 -- 1 IP address (1 host up) scanned in 67.32 seconds
