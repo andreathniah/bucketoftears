@@ -106,3 +106,4 @@ Password[Of c4bbag3s and k1ngs]
 The hurrier I go,
 the behinder I get.
 ```
+*Anddddd...* I officially gave up here. Let's hope someone wrote a writeup about this challenge! 
