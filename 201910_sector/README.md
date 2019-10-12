@@ -1,20 +1,20 @@
-## SecTor
+# SecTor 2019 CTF
 
 Upon registration, all attendees are given a physical copy of a pocket guide that details the conference details. Looking closely at one of the pages, we can see that a CTF is totally taking place!
 
-![0_physicalpocketguide](D:\noobz\bucketoftears\201910_sector\0_physicalpocketguide.jpg)
+![0_physicalpocketguide](./writeup/0_physicalpocketguide.jpg)
 
 Squinting at the far left of the image, we see a `base64` encoded string, *interesting*! Following the instructions on the page, I eventually found the *Nuix + Dolos Group* booth at Hall 700 and was given the link to the CTF platform: [sector2019ctf.online](sectorctf2019.online).
 
 Here's the cute entrance page we are greeted with!
 
-![1_enterance](D:\noobz\bucketoftears\201910_sector\1_enterance.PNG)
+![1_enterance](./writeup/1_enterance.PNG)
 
 We first started out by taking a quick look at the source code via developer tools. Oh hey an image was commented out! Accessing `sectorctf2019.online/images/2019_pocket_guide.png` led us to a blown up image of what we see in the physical guide book. Great! Now we can programmatically extract the `base64` text to decode them!
 
-![1_inspectme](D:\noobz\bucketoftears\201910_sector\1_inspectme.PNG)
+![1_inspectme](./writeup/1_inspectme.PNG)
 
-![1_pocket_guide](D:\noobz\bucketoftears\201910_sector\1_pocketguide.png)
+![1_pocket_guide](./writeup/1_pocketguide.png)
 
 Initially, we went through the long process of rotating the image, cropping the `base64` text and run them though an online [Optical Character Recognition tool](https://www.onlineocr.net/). We eventually realized that we can actually just open up the image as text (rename the `png` extension to `txt`, or plain old `strings` command) to grab the string. Simple!
 
@@ -30,23 +30,23 @@ Aww man, it wasn't a flag :(
 
 But that's okay, because clicking through other links on the webpage led us to your flag with the abovementioned flag format! Woohooo!
 
-![1_flag](D:\noobz\bucketoftears\201910_sector\1_flag.PNG)
+![1_flag](./writeup/1_flag.PNG)
 
 **Flag 1: SecTor[Go on till you come to the end, then stop.]**
 
 
 
-Based on the instructions on the first flag, we proceed to `sectorctf2019.online/knock/knock/packets.pcap` and were given a `pcap` file. As the extension suggests, its a `wireshark` file. Filtering the results for `http` and `http2`, we spotted something! It seems that our victim was trying to download an achieved file from `sectorctf2019.online/Doorknob.7z`. 
+Based on the instructions on the first flag, we proceed to `sectorctf2019.online/knock/knock/packets.pcap` and were given a [`pcap`](./source/packets.pcap) file. As the extension suggests, its a `wireshark` file. Filtering the results for `http` and `http2`, we spotted something! It seems that our victim was trying to download an achieved file from `sectorctf2019.online/Doorknob.7z`. 
 
 Let's try to download them via `wget`...
 
-![2_wget](D:\noobz\bucketoftears\201910_sector\2_wget.PNG)
+![2_wget](./writeup/2_wget.PNG)
 
-Nope, we got`404`  status code. That's fine because `wireshark` could totally help us achieve the same result since `wireshark` captured the complete file bytes of the 7zip file.
+Nope, we got `404` status code. That's fine because `wireshark` could totally help us achieve the same result since `wireshark` captured the complete file bytes of the 7zip file.
 
 We can recreate this `zip` file by right clicking the highlighted bytes and select `Export Packet Bytes`. A cursory search on Google teaches us that `7z` is another form of `zip` file, unfortunately, unzipping via Linux command proves to be rather hard, so we went through the long route of transferring the file over to Windows, extract them, then return it back to our `Kali Linux` virtual machine. 
 
-![2_wireshark](D:\noobz\bucketoftears\201910_sector\2_wireshark.PNG)
+![2_wireshark](./writeup/2_wireshark.PNG)
 
 Here comes the weird part -- the extracted `Doorknob` file doesn't run even with permissions granted via `chmod +x Doorknob`. So frustrating!
 
@@ -60,13 +60,13 @@ Doorknob: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically l
 
 Yep, we got our flag!
 
-![2_flag](D:\noobz\bucketoftears\201910_sector\2_flag.PNG)
+![2_flag](./writeup/2_flag.PNG)
 
 **Flag 2: SecTor[No, I do mean impassible. Nothing's impossible!]**
 
 
 
-Downloading `sectorctf2019.online/stage/B/binary.pdf`, we obtain a rather interesting [PDF file](./binary.pdf) -- we see a bunch of binary numbers! 
+Downloading `sectorctf2019.online/stage/B/binary.pdf`, we obtain a rather interesting [PDF file](./source/binary.pdf) -- we see a bunch of binary numbers! 
 
 ```
 01010110 01101101 01001110 01110010 01001001 01000111 01010010 01110000 01100010 01101101
@@ -80,7 +80,7 @@ Downloading `sectorctf2019.online/stage/B/binary.pdf`, we obtain a rather intere
 
 Converting these `binary` to `ascii` with space as the delimiter, we obtain a `base64` string which can further be decoded to the output shown below.
 
-![3_binarybase64](D:\noobz\bucketoftears\201910_sector\3_binarybase64.PNG)
+![3_binarybase64](./writeup/3_binarybase64.PNG)
 
 Hmm, the output doesn't make sense. But it seems that this could be a `ROT13` cipher, given that its linguistic properties look awfully similar English's structure. Going with that line of thought, we can identify words with single letters to be either `a` or `I`. The fact that different lines of single letter words are encoded in different letters suggests that each line might be wrapped with different values.
 
@@ -106,4 +106,3 @@ Password[Of c4bbag3s and k1ngs]
 The hurrier I go,
 the behinder I get.
 ```
-
