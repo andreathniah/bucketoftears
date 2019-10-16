@@ -1,4 +1,5 @@
 # SecTor 2019 CTF
+
 **Event name**: SecTor 2019  
 **Location**: Metro Toronto Convention Centre  
 **Date**: 09/10/2019 - 10/10/2019  
