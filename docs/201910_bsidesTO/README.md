@@ -7,7 +7,7 @@
 
 Teamed up with [Brandon](https://www.linkedin.com/in/brandon-mesquita-24b1a3172/) from ThreatGRID Cisco and I learned tons from picking his brains for ideas and solutions!
 
-![Results](./writeup/Results.PNG)
+![Results](./writeup/results.PNG)
 
 
 ## [Web] Encrypted
