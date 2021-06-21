@@ -18,19 +18,6 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Bucket of Tears
-description: >- # this means to ignore newlines until "baseurl:"
-  Cybersecurity is fun, but it is always so challenging that it makes me cry buckets of tears. Check out what I am currently cracking my brains over!
-baseurl: "/bucketoftears" # the subpath of your site, e.g. /blog
-url: "https://andreathniah.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-
-# Build settings
-remote_theme: chesterhow/tale
-permalink: /:year-:month-:day/:title
-paginate: 5
-plugins:
-  - jekyll-paginate
-  - jekyll-remote-theme
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
@@ -50,3 +37,17 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+# Site settings
+title: Bucket of Tears
+description: Cybersecurity is fun, but it is always so challenging that it makes me cry buckets of tears!
+baseurl: "/bucketoftears" # the subpath of your site, e.g. /blog
+url: "https://andreathniah.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+remote_theme: chesterhow/tale
+permalink: /:year-:month-:day/:title
+paginate: 5
+plugins:
+  - jekyll-paginate
+  - jekyll-remote-theme
