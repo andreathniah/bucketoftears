@@ -51,3 +51,8 @@ paginate: 5
 plugins:
   - jekyll-paginate
   - jekyll-remote-theme
+
+google_analytics: UA-123756712-5
+
+# Excludes
+exclude: [Gemfile, Gemfile.lock, tale.gemspec]
