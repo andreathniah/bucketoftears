@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Day of Shecurity 2019" />
 <script type="application/ld+json">
-{"description":"It has been a couple of months since I’ve step afoot into the land of raccoons Canada and I thought that is high time for me to immerse myself into the security community here at downtown Toronto.","url":"/2019-09-28/day-of-shecurity","headline":"Day of Shecurity 2019","dateModified":"2019-09-28T00:00:00+08:00","datePublished":"2019-09-28T00:00:00+08:00","author":{"@type":"Person","name":"BoT"},"mainEntityOfPage":{"@type":"WebPage","@id":"/2019-09-28/day-of-shecurity"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","description":"It has been a couple of months since I’ve step afoot into the land of raccoons Canada and I thought that is high time for me to immerse myself into the security community here at downtown Toronto.","mainEntityOfPage":{"@type":"WebPage","@id":"/2019-09-28/day-of-shecurity"},"url":"/2019-09-28/day-of-shecurity","author":{"@type":"Person","name":"BoT"},"headline":"Day of Shecurity 2019","dateModified":"2019-09-28T00:00:00+08:00","datePublished":"2019-09-28T00:00:00+08:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -147,7 +147,7 @@
 
 <p>Googling <code class="language-plaintext highlighter-rouge">vserver</code> reveals that this is just a term for virtual private server like Digital Ocean, Heroku etc. With the challenge description in mind, I went ahead to do a reverse lookup on the URL given via <a href="https://www.shodan.io/host/142.93.151.96">Shodan.io</a>.</p>
 
-<p>Right off the bat, I saw something interesting - the IP address <code class="language-plaintext highlighter-rouge">142.93.151.96</code> actually has its hostname set as <code class="language-plaintext highlighter-rouge">y2mk.cc</code>. Several ports are also opened: 22, 80, 443, 8443. This result coincides with what I would see if I were to run nmap using <code class="language-plaintext highlighter-rouge">nmap -sc -sV -oA y2mk 142.93.151.96</code></p>
+<p>Right off the bat, I saw something interesting - the IP address <code class="language-plaintext highlighter-rouge">142.93.151.96</code> actually has its hostname set as <code class="language-plaintext highlighter-rouge">y2mk.cc</code>. Several ports are also opened: 22, 80, 443, 8443. This result coincides with what I would see if I were to run <a href="../assets/201909_shecurity/y2mk.nmap">nmap</a> using <code class="language-plaintext highlighter-rouge">nmap -sc -sV -oA y2mk 142.93.151.96</code></p>
 
 <p>Visiting <code class="language-plaintext highlighter-rouge">y2mk.cc</code> tells me that I am on the correct path:</p>
 
@@ -535,7 +535,7 @@ The half of the answer:
 
     <footer>
   <span>
-    &copy; <time datetime="2021-06-21 11:39:45 +0800">2021</time> . Made with Jekyll using the <a href="https://github.com/chesterhow/tale/">Tale</a> theme.
+    &copy; <time datetime="2021-06-21 13:25:24 +0800">2021</time> . Made with Jekyll using the <a href="https://github.com/chesterhow/tale/">Tale</a> theme.
   </span>
 </footer>
 
