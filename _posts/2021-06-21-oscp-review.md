@@ -181,7 +181,7 @@ On top of my head, there’s a couple stuff I want to try out.
 
 **Bug bounty** is one. I have tried my hand at it but realized that I need to up my game at my practical reconnaissance methodology before getting my hands dirty into the technical bits. One can’t hunt for exploits when one doesn’t even know what assets are available.
 
-Certification wise, achieving **[Offensive Security Web Experience](https://www.offensive-security.com/awae-oswe/)** (OSWE) is certainly a target. Unfortunately, I have little development experience and zero knowledge on source code review. Since I prefer to be decently prepared before I shell out the amount of money OSWE requires, this will be on the back burner for a while.
+Certification wise, achieving **[Offensive Security Web Expert](https://www.offensive-security.com/awae-oswe/)** (OSWE) is certainly a target. Unfortunately, I have little development experience and zero knowledge on source code review. Since I prefer to be decently prepared before I shell out the amount of money OSWE requires, this will be on the back burner for a while.
 
 Another certification that I’m considering is the **[Practical Network Penetration Tester](https://certifications.tcm-sec.com/)** (PNPT) certification from TCM Security, Inc. It’s fairly new, but I feel that it would be a natural progression from OSCP as the exam scope features Active Directory exploitation to compromise the exam Domain Controller. Definitely sounds like a challenge.
 

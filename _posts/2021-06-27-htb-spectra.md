@@ -32,7 +32,7 @@ Upon accessing the site, I see hints -- at the source code -- that suggests the 
 
 ![webserver](../assets/202106_htb_spectra/0_webserver_hint.png)
 ![ip-hostname-mapping](../assets/202106_htb_spectra/1_host_mapping.png)
-one 
+ 
 While manually enumerating the webserver, I noticed that `spectra.htb/main` is a WordPress directory. Further enumeration via `wpscans` yield no interesting results except that `administrator` was a valid user.
 
 ```bash
