@@ -41,8 +41,8 @@
 # Site settings
 title: Bucket of Tears
 description: Cybersecurity is fun, but it is always so challenging that it makes me cry buckets of tears!
-baseurl: "/bucketoftears" # the subpath of your site, e.g. /blog
-url: "https://andreathniah.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://bucketoftears.netlify.app" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
 remote_theme: chesterhow/tale
