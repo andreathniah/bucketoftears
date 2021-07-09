@@ -45,7 +45,7 @@ This question is out of sequence, but I thought it should be addressed first giv
 
 #### Reliance on Hints vs "Try Harder" Mentality
 
-Let's have a quick discussion over the use of hints. I believe this is a topic that many agonized over while working on difficult boxes. While preparing for my own exam, I across this interesting [perspective from u/FearfulFerret](https://www.reddit.com/r/oscp/comments/m29gx4/oscp_practical_advice_for_success/) over at _r/oscp_ as thought that I should share.
+Let's have a quick discussion over the use of hints. I believe this is a topic that many agonized over while working on difficult boxes. While preparing for my own exam, I came across this interesting [perspective from u/FearfulFerret](https://www.reddit.com/r/oscp/comments/m29gx4/oscp_practical_advice_for_success/) over at _r/oscp_ as thought that I should share.
 
 > _I decided it would be better to expose myself to as much material as possible in the time before the exam rather than beating my head against wall after wall; this worked well for me, but I think this is an area where everyone will be different. **Looking at hints prioritizes exposing you to as large a variety of enumeration and exploitation techniques as you can. Foregoing hints prioritizes your methodology and drive.** Work on whichever seems more meaningful to you._
 
