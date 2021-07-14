@@ -2,7 +2,7 @@
 layout: post
 title: "HTB - Spectra"
 author: "BoT"
-tags: "cybersecurity hackthebox"
+tags: "hackthebox"
 excerpt_separator: <!--more-->
 ---
 
