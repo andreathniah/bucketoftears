@@ -28,11 +28,11 @@ Spectra has just retired from HackTheBox! Here's a quick and dirty writeup on my
 
 Nmap scans reveals that Spectra is a rather straight foward box with only 3 open ports: `:22`, `:80`, `:3306`. Since MySQL port cannot be accessed remotely, I decided to focused on the webserver first.
 
-Upon accessing the site, I see hints -- at the source code -- that suggests the need for the box's IP address to be mapped to `spectra.htb`. This prompted me edit `/etc/hosts` as shown below. With this, I can now access 10.10.10.229 with just http://spectra.htb via browser.
+Upon accessing the site, I see hints -- at the source code -- that suggests the need for the box's IP address to be mapped to `spectra.htb`. This prompted me edit `/etc/hosts` as shown below. With this, I can now access 10.10.10.229 with just `http://spectra.htb` via browser.
 
 ![webserver](../assets/202106_htb_spectra/0_webserver_hint.png)
 ![ip-hostname-mapping](../assets/202106_htb_spectra/1_host_mapping.png)
- 
+
 While manually enumerating the webserver, I noticed that `spectra.htb/main` is a WordPress directory. Further enumeration via `wpscans` yield no interesting results except that `administrator` was a valid user.
 
 ```bash

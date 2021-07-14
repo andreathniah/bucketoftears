@@ -14,7 +14,7 @@ This handle name was borne from my tears of frustration as I hit the wall over a
 >
 > _– me as I grumble over my life choices at every CTF._
 
-This blog documents my journey towards improving my security skills. They can be viewed at https://andreathniah.github.io/bucketoftears.
+This blog documents my journey towards improving my security skills. They can be viewed at https://bucketoftears.netlify.app/.
 
 ### `/usr/bin/man bucketoftears`
 
