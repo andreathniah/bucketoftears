@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Bsides Toronto 2019"
-tags: "cybersecurity ctf"
+tags: "ctf"
 author: "BoT"
 ---
 

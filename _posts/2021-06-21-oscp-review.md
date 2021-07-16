@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "OSCP Review"
+title: "OSCP Review 2021"
 author: "BoT"
-tags: "cybersecurity certification"
+tags: "certification"
 ---
 
 I have recently sat for the Offensive Security Certified Professional (OSCP) exam and passed in my first attempt with an estimated score of 77.5 points.
@@ -76,7 +76,7 @@ Overall, I would categorize this period as "casual preparation" as they were don
 
 Before we continue, let's set the stage for how much time I was able to dedicate to seriously prepare for this certification.
 
-At the point of course registration in March 2021, I was in my last semester of university and had fairly light workload. This allowed me to dedicate 3 days a week for a full month. After which, I would have to stop cold turkey for nearly 2 weeks due to final examinations (gal gotta study and graduate) before being able to spend 24/7 on the subsequent month focusing solely on the certification. In total, I had about 3 months of serious preparation before my scheduled exam in June 2021.
+At the point of course registration in March 2021, I was in my last semester of university and had fairly light workload. This allowed me to dedicate 3 days a week for a full month. After which, I would have to stop cold turkey for nearly 2 weeks due to final examinations (gal gotta study and graduate) before being able to spend 24/7 on the subsequent month focusing solely on the certification. In total, I had about 4 months of serious preparation before my scheduled exam in June 2021.
 
 #### Offensive Security Official Labs
 

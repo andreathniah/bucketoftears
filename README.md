@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/54831ae1-0296-41db-aed4-daf65592227a/deploy-status)](https://app.netlify.com/sites/bucketoftears/deploys)
+
 ### `/usr/bin/hostname`
 
 Bucket of Tears

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Day of Shecurity 2019"
-tags: "cybersecurity ctf"
+tags: "ctf"
 author: "BoT"
 ---
 
