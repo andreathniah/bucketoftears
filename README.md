@@ -26,5 +26,5 @@ To build and serve the site:
 
 ```bash
 bundle
-jekyll serve --livereload
+jekyll serve --livereload --draft
 ```

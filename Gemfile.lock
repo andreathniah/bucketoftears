@@ -84,6 +84,7 @@ DEPENDENCIES
   jekyll-feed (~> 0.12)
   jekyll-paginate
   jekyll-remote-theme
+  jekyll-seo-tag
   tale (~> 0.2.3)
   tzinfo (~> 1.2)
   tzinfo-data
