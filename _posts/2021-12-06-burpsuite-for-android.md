@@ -2,7 +2,7 @@
 layout: post
 title: "Setting up Burpsuite for Android Pentesting"
 author: "BoT"
-tags: "bugbounty"
+tags: "bugbounty guides"
 ---
 
 Everyone knows that when it comes to penetration testing, [Burpsuite by PortSwigger](https://portswigger.net/burp/communitydownload) is our best friend. While there are tons of tutorials out there that guides one through the process of configuring their go-to browser to play well with Burpsuite, what about mobile applications? How does one get Burpsuite to intercept requests from an Android APK of their choosing?
@@ -31,10 +31,10 @@ As someone new to mobile audits, this was a question that stumped me too. So her
 
   In Android Studios, create the following virtual devices:
 
-  | Name      | Purpose                               | Specification                                      |
-  | --------- | ------------------------------------- | -------------------------------------------------- |
-  | Playstore | w Google Play, to download APK        | Nexus 5 API 29, Android 10.0 with Google Play, x86 |
-  | Rooted    | w/o Google Play, a rooted environment | Nexus 5 API 23, Android 6.0, x86                   |
+  | Name        | Purpose                               | Specification                                      |
+  | ----------- | ------------------------------------- | -------------------------------------------------- |
+  | `Playstore` | w Google Play, to download APK        | Nexus 5 API 29, Android 10.0 with Google Play, x86 |
+  | `Rooted`    | w/o Google Play, a rooted environment | Nexus 5 API 23, Android 6.0, x86                   |
 
 - Install `jadx`, `apktool` and `objection` via [Homebrew](https://brew.sh/)
 
