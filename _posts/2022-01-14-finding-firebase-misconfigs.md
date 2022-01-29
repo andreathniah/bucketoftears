@@ -2,7 +2,7 @@
 layout: post
 title: "Leaked API Keys and Firebase Misconfigurations"
 author: "BoT"
-tags: "bugbounty tools"
+tags: "mobile"
 excerpt_separator: <!--more-->
 ---
 

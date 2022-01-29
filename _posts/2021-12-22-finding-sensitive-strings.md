@@ -2,7 +2,7 @@
 layout: post
 title: "Finding Sensitive Strings in APKs"
 author: "BoT"
-tags: "bugbounty tools"
+tags: "mobile"
 excerpt_separator: <!--more-->
 ---
 
