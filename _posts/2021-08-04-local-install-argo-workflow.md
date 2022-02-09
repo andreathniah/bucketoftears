@@ -2,7 +2,7 @@
 layout: post
 title: "Local Installation of Argo Workflow"
 author: "BoT"
-tags: "devops guides"
+tags: "devops"
 excerpt_separator: <!--more-->
 ---
 

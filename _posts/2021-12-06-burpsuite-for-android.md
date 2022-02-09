@@ -2,7 +2,7 @@
 layout: post
 title: "Setting up Burpsuite for Android Pentesting"
 author: "BoT"
-tags: "bugbounty guides"
+tags: "mobile"
 ---
 
 Everyone knows that when it comes to penetration testing, [Burpsuite by PortSwigger](https://portswigger.net/burp/communitydownload) is our best friend. While there are tons of tutorials out there that guides one through the process of configuring their go-to browser to play well with Burpsuite, what about mobile applications? How does one get Burpsuite to intercept requests from an Android APK of their choosing?
