@@ -25,6 +25,7 @@ This blog is powered by Jekyll's [Tale theme](https://github.com/chesterhow/tale
 To build and serve the site:
 
 ```bash
-bundle
-jekyll serve --livereload --draft
+bundle config set --local path 'vendor/bundle'
+bundle install
+bundle exec jekyll serve --livereload --draft
 ```
