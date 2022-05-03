@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Deploying GUI Applications on Kubernetes"
+title: "Deploying GUI Applications with Kubernetes"
 author: "BoT"
 tags: "devops"
 excerpt_separator: <!--more-->
 ---
 
-We have tons of tutorials online teaching us how to run GUI applications on Docker. But barely any of them talked about how to do so on Kubernetes.
+We have tons of tutorials online teaching us how to run GUI applications with Docker. But barely any of them talked about how to do so with Kubernetes.
 
 <!--more-->
 
@@ -16,9 +16,9 @@ I know, I know, you must be wondering, why in the world would you need to run GU
 
 So, first thing first, to run a GUI application, you'll first need to have a GUI environment. This means `/tmp/.X11-unix` must be available.
 
-You might be tempted to start off with a Ubuntu Server 20.04, install UI into it, set up RDP, blah blah blah -- it's a hassle and things _will_ break if you configure them wrongly, but if you are a masochist (or a pro), by all means, go ahead.
+You might be tempted to start off with a Ubuntu Server 20.04, install UI into it, set up RDP, blah blah blah -- it's a hassle and things _will_ break if you misconfigure them; but if you are a masochist (or a pro), by all means, go ahead.
 
-That said, we'll be using Ubuntu Desktop 20.04 LTS as our OS for this tutorial.
+That said, we'll be using **Ubuntu Desktop 20.04** as our OS for this tutorial.
 
 ## Instructions
 
@@ -33,7 +33,7 @@ pip3 install docker-compose
 
 ### Step 2: Spin Up Dockerized Firefox Container
 
-This step mainly checks if the server is properly configured to allow dockerized GUI applications to run. Most issues on this step arises when `xhost` is not set to allow any host to connect to your server. For those seeking for more restrictive settings, do check [this StackOverflow post](https://stackoverflow.com/questions/28392949/running-chromium-inside-docker-gtk-cannot-open-display-0).
+This step mainly checks if the environment is properly configured to allow dockerized GUI applications to run. Most issues on this step arises when `xhost` is not set to allow any host to connect to your server. For those seeking for more restrictive settings, do refer to [this StackOverflow post](https://stackoverflow.com/questions/28392949/running-chromium-inside-docker-gtk-cannot-open-display-0).
 
 Note that you can also choose to supply hardcoded value for `DISPLAY` variable (e.g. `:0`)
 
@@ -108,11 +108,11 @@ const puppeteer = require("puppeteer");
 
 ### Step 4: Craft YAML File for Customized Container
 
-This step assumes that you will be using [Argo Workflow](https://argoproj.github.io/argo-workflows/) for delegation of tasks on Kubernetes cluster. For more information on setting up of Argo Workflow, check out [this blogpost](../2021-08-04/local-install-argo-workflow).
+This step assumes that you are using [Argo Workflow](https://argoproj.github.io/argo-workflows/) for delegation of tasks on Kubernetes cluster. For more information on setting up of Argo Workflow, check out [this post](../2021-08-04/local-install-argo-workflow).
 
-The contents in `argo.yaml` file are actually directly converted from the `docker-compose.yaml` file seen in the previous step. The only modifications were to:
+The contents in `argo.yaml` file are actually directly converted from the `docker-compose.yaml` file established in the previous step. The only modifications were to:
 
-- Add `nodeAffinity` to ensure GUI-related tasks are assigned to node with X11 installed
+- Add `nodeAffinity` to ensure GUI-related tasks are assigned to node with X11 available
 - Hardcode `DISPLAY` variable as it is impossible for Kubernetes to dynamically establish the value without extensive fiddling
 
 Now that all the ingredients are in the frying pan, we can start cooking with `argo submit -n argo argo.yaml --watch`
@@ -155,7 +155,9 @@ spec:
             path: /tmp/.X11-unix
 ```
 
-Wait a second, how in the world did you enroll the Ubuntu Desktop into an existing Kubernetes cluster in the first place?
+And oh, you might ask:
+
+> "How in the world did you enroll the Ubuntu Desktop into the existing Kubernetes cluster that you had in the first place?"
 
 Well... that is one huge step that deserves a post of its own, so that's for another time. Though if you are already knowledgeable with Kubernetes, this shouldn't be an issue.
 
