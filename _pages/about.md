@@ -18,6 +18,6 @@ This blog documents my journey towards improving my security skills.
 
 **Some highlights from my journey as of 2021:**
 
-- [2021/06] Achieved Offensive Security Certified Professional (OSCP) certification
-- [2020/07] Responsible disclosure of a CVSS 8.4 Sensitive Data Exposure vulnerability
-- [2019/09] Ranked in a CTF without being [carried](https://www.urbandictionary.com/define.php?term=Carried) by others
+- [2021] Achieved Offensive Security Certified Professional (OSCP) certification
+- [2020] Responsible disclosure of a CVSS 8.4 Sensitive Data Exposure vulnerability
+- [2019] Ranked in a CTF without being [carried](https://www.urbandictionary.com/define.php?term=Carried) by others
