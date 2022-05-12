@@ -28,9 +28,11 @@ Our goal here would be to establish the `master` server as the Kubernetes contro
 2. **Kubernetes workers**: commands executed in _all_ `worker` servers
 3. **All participating nodes**: commands executed in _both_ `master` _and all_ `worker` servers
 
-Note that all commands are to be executed as root user. And yes, we will be using the term "server" and "node" interchangeably because I can't make up my mind.
+Note that **all commands are to be executed as root user**. And yes, we will be using the term "server" and "node" interchangeably because I can't make up my mind.
 
-Anyway.
+Ready? Here we go!
+
+## Instructions
 
 ### At All Participating Nodes (as `master` and `worker-*`)
 
@@ -111,8 +113,8 @@ Note that the values of the initialization command are decided based on several 
 
 - `control-plane-endpoint`: User defined at `/etc/hosts` as per (4). Required to be defined in every node (both master and worker)
 - `apiserver-advertise-address`: Refers to the internal IP address of the master node
-- `pod-network-cidr`: No strict criteria, as long as the CIRR does not collide with anything else
-- `service-cidr`: No strict criteria, as long as the CIRR does not collide with anything else
+- `pod-network-cidr`: No strict criteria, as long as the CIDR does not collide with anything else
+- `service-cidr`: No strict criteria, as long as the CIDR does not collide with anything else
 
 More often than not, `pod-network-cidr` and `service-cidr` can remain as `172.24.0.0/16` and `172.25.0.0/16` respectively since they are internal IP addresses and are isolated from other servers hosting services.
 
@@ -154,7 +156,7 @@ wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-
 # This is the pod-network-cidr previously configured
 sed -i -- 's/10.244.0.0/172.24.0.0/g' kube-flannel.yml
 
-# Update to grab any address within the advertised subnet of 10.y.y.y
+# To grab addresses within subnet of 10.y.y.y
 vim ~/setup-flannel/kube-flannel.yml
    containers:
 	   - name: kube-flannel
@@ -173,7 +175,7 @@ kubectl apply -f kube-flannel.yml
 **Step 7. Update `iptables` to allow input from internal addresses**
 
 ```bash
-# Assuming that all participating nodes are of 10.z.z.z as internal IP
+# Assuming that all participating nodes are of 10.y.y.y as internal IP
 iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT
 iptables -A INPUT -s 172.24.0.0/16 -j ACCEPT
 iptables -A INPUT -s 172.25.0.0/16 -j ACCEPT
@@ -206,7 +208,7 @@ kubeadm join control-plane:6443 \
 **Step 10. Update `iptables` to ensure all nodes can communicate with each other**
 
 ```bash
-# Assuming that all participating nodes are of 10.z.z.z as internal IP
+# Assuming that all participating nodes are of 10.y.y.y as internal IP
 iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT
 iptables -A INPUT -s 172.24.0.0/16 -j ACCEPT
 iptables -A INPUT -s 172.25.0.0/16 -j ACCEPT
