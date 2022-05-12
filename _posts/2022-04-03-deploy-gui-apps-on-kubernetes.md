@@ -12,7 +12,7 @@ We have tons of tutorials online teaching us how to run GUI applications with Do
 
 I know, I know, you must be wondering, why in the world would you need to run GUI applications using Kubernetes???? Believe it or not, I actually had a legitimate use-case for it and it was painful figuring out the _hows_ of running dockerized GUI applications at scale.
 
-## Preresquites
+## Prerequisite
 
 So, first thing first, to run a GUI application, you'll first need to have a GUI environment. This means `/tmp/.X11-unix` must be available.
 
