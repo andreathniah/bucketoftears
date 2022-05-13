@@ -10,15 +10,15 @@ Okay, you reversed an APK and you found a couple of Google API keys, now what?
 
 <!--more-->
 
-Good question. When it comes to mobile penetration testing, the lowest hanging fruits are the Gogole API keys used for Firebase projects. Unfortunately, the [official Firebase documentation](https://firebase.google.com/docs/projects/api-keys) highlights:
+Good question. When it comes to mobile penetration testing, the lowest hanging fruits are the Google API keys used for Firebase projects. Unfortunately, the [official Firebase documentation](https://firebase.google.com/docs/projects/api-keys) highlights:
 
 > _Unlike how API keys are typically used, API keys for Firebase services are **not** used to control access to backend resources; that can only be done with Firebase Security Rules [...] and App Check [...]_
 
-This means that unless we can demostrate that the keys are used in misconfigured services, the security impact of such leaked keys are practically zero.
+This means that unless we can demonstrate that the keys are used in misconfigured services, the security impact of such leaked keys are practically zero.
 
 After [some digging](https://stackoverflow.com/questions/37482366/is-it-safe-to-expose-firebase-apikey-to-the-public), it seems like there is a way after all -- especially if user registrations via API keys are enabled. With a valid authentication token, an attacker can simply utilize the Firebase SDK to authenticate and run queries as a normal user. This effectively transforms the security weakness from a simple information disclosure to a potential improper access control issue.
 
-With the question becoming: _"Are there any Firebase-related services that does not properly validate whether the user is authorized to take certain actions?"_ Here's a simple checklist I use to determine if the API key is overly permissble ([and yes, I wrote a script to automate this](https://github.com/andreathniah/tips-and-tricks/blob/master/scripts/check-firebase-misconfiguration.py)):
+With the question becoming: _"Are there any Firebase-related services that does not properly validate whether the user is authorized to take certain actions?"_ Here's a simple checklist I use to determine if the API key is overly permissible ([and yes, I wrote a script to automate this](https://github.com/andreathniah/tips-and-tricks/blob/master/scripts/check-firebase-misconfiguration.py)):
 
 - Does the key allows unauthenticated write in Cloud Messaging?
 - Does the key allows unauthenticated read/write in Cloud Firestore?

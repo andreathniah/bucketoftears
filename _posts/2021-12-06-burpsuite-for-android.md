@@ -62,7 +62,7 @@ As someone new to mobile audits, this was a question that stumped me too. So her
   **Bind to port:** 8082 \
   **Bind to address:** All interfaces
 
-- At Brupsuite, under `Poxy > Options > Proxy Listener > Export CA certificate`
+- At Brupsuite, under `Proxy > Options > Proxy Listener > Export CA certificate`
 
   **Select** `Certificate in DER format` \
   **Export file** as `Burpsuite.CER`
