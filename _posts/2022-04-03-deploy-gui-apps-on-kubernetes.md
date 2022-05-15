@@ -10,7 +10,7 @@ We have tons of tutorials online teaching us how to run GUI applications with Do
 
 <!--more-->
 
-I know, I know, you must be wondering, why in the world would you need to run GUI applications using Kubernetes???? Believe it or not, I actually had a legitimate use-case for it and it was painful figuring out the _hows_ of running dockerized GUI applications at scale.
+I know, I know, you must be wondering, why in the world would you need to run GUI applications using Kubernetes???? Believe it or not, I actually had a [legitimate use-case](../2022-05-15/security-automation-at-scale) for it and it was painful figuring out the _hows_ of running dockerized GUI applications at scale.
 
 ## Prerequisite
 
