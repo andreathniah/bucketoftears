@@ -12,7 +12,7 @@ Getting Argo Workflow up and running is rather straightforward when you use thei
 
 (Or maybe I'm just too noob 🥲)
 
-This guide assumes that you are using `install.yaml` -- the standard argo cluster-wide installation -- as the manifest, and that `Helm` and `Kubernetes` are already pre-installed and ready to go. For more information on setting up Kubernetes, check [this post](../2021-09-10/prod-setup-kubernetes) out
+This guide assumes that you are using `install.yaml` -- the standard argo cluster-wide installation -- as the manifest, and that `Helm` and `Kubernetes` are already pre-installed and ready to go. For more information on setting up Kubernetes, do check out [this post](../2021-09-10/prod-setup-kubernetes).
 
 ### Step 1: Install Argo CLI
 

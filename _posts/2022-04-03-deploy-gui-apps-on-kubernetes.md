@@ -108,7 +108,7 @@ const puppeteer = require("puppeteer");
 
 ### Step 4: Craft YAML File for Customized Container
 
-This step assumes that you are using [Argo Workflow](https://argoproj.github.io/argo-workflows/) for delegation of tasks on Kubernetes cluster. For more information on setting up of Argo Workflow, check out [this post](../2021-08-04/local-install-argo-workflow).
+This step assumes that you are using [Argo Workflow](https://argoproj.github.io/argo-workflows/) for delegation of tasks on Kubernetes cluster. For more information on setting up of Argo Workflow, check out these installation guides for [local](../2021-08-04/local-install-argo-workflow) and/or [production](../2021-10-17/prod-install-argo-workflow) environment.
 
 The contents in `argo.yaml` file are actually directly converted from the `docker-compose.yaml` file established in the previous step. The only modifications were to:
 
@@ -159,7 +159,7 @@ And oh, you might ask:
 
 > "How in the world did you enroll the Ubuntu Desktop into the existing Kubernetes cluster that you had in the first place?"
 
-Well... that is one huge step that deserves a post of its own, so that's for another time. Though if you are already knowledgeable with Kubernetes, this shouldn't be an issue.
+Well... I've actually covered something similar in [a previous blog post](../2021-09-10/prod-setup-kubernetes), but I might write a separate one if I ever decide not to be lazy. That said, if you are already knowledgeable with Kubernetes, this shouldn't be much of an issue.
 
 ## References
 
