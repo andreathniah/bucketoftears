@@ -11,8 +11,7 @@ author: "BoT"
 
 This handle name was borne from my tears of frustration as I hit the wall over and over again with various challenges at Capture the Flag (CTF) competitions.
 
-> _"God, I hate this. I can't solve shit and I bet my tears can fill up buckets at this rate."_\
-> _-- me as I grumble over my life choices at every CTF._
+> "God, I hate this. I can't solve shit and I bet my tears can fill up buckets at this rate."
 
 This blog documents my journey towards improving my security skills.
 
