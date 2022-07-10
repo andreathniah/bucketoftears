@@ -50,9 +50,9 @@ To be fair, it _is_ simple -- if you were automating the login process for <50 e
 
 So yep, it was a big headache indeed.
 
-#1 and #3 wasn't much of an issue in terms of logic and algorithm. They took some time, yes, but that was mostly because I am _terrible_ software engineer (data structures and algorithms are absolutely NOT my cup of tea).
+#1 and #3 wasn't much of an issue in terms of logic and algorithm. They took some time, yes, but that was mostly because I am a _terrible_ software engineer (data structures and algorithms are absolutely NOT my cup of tea).
 
-For the former, just about any headless browser would work, and I decided to go with Google's Puppeteer simply because I have had prior experience scraping website with it. For the latter, I came up with a very rudimentary "scoring" system where more points are awarded to endpoints that had the relevant HTTP requests and/or responses as seen in the [OAuth 2.0 grant-type specifications](https://portswigger.net/web-security/oauth/grant-types). It's not foolproof, but that will be something to improve on for `v2.0.0`.
+For the former, just about any headless browser would work, and I decided to go with Google's Puppeteer simply because I have had prior experience scraping websites with it. For the latter, I came up with a very rudimentary "scoring" system where more points are awarded to endpoints that had the relevant HTTP requests and/or responses as seen in the [OAuth 2.0 grant-type specifications](https://portswigger.net/web-security/oauth/grant-types). It's not foolproof, but that will be something to improve on for `v2.0.0`.
 
 The hardest part, in my opinion, was #2 and #4.
 

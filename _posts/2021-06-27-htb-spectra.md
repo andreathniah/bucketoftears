@@ -2,7 +2,7 @@
 layout: post
 title: "HTB - Spectra"
 author: "BoT"
-tags: "hackthebox"
+tags: "writeup"
 excerpt_separator: <!--more-->
 ---
 
@@ -31,6 +31,7 @@ Nmap scans reveals that Spectra is a rather straight foward box with only 3 open
 Upon accessing the site, I see hints -- at the source code -- that suggests the need for the box's IP address to be mapped to `spectra.htb`. This prompted me edit `/etc/hosts` as shown below. With this, I can now access 10.10.10.229 with just `http://spectra.htb` via browser.
 
 ![webserver](../assets/202106_htb_spectra/0_webserver_hint.png)
+
 ![ip-hostname-mapping](../assets/202106_htb_spectra/1_host_mapping.png)
 
 While manually enumerating the webserver, I noticed that `spectra.htb/main` is a WordPress directory. Further enumeration via `wpscans` yield no interesting results except that `administrator` was a valid user.
@@ -66,6 +67,7 @@ I confirmed this by navigating to `spectra.htb/main/?cmd=whoami`. Success!
 Unfortuantely, attempting to trigger a reverse shell via this backdoor didn't work. Instead, I utilized PHP shell from `/usr/share/webshells/php/php-reverse-shell.php` and added it to the `header.php`. Woohoo, a low-privilege shell!
 
 ![php-reverse-shell](../assets/202106_htb_spectra/4_php_reverse_shell.png)
+
 ![web-shell](../assets/202106_htb_spectra/5_web_shell.png)
 
 #### Escalating to User Shell
@@ -78,6 +80,7 @@ mysql -u dev -p
 ```
 
 ![database-credentials](../assets/202106_htb_spectra/6_more_db_credentials.png)
+
 ![database-enumeration](../assets/202106_htb_spectra/7_interesting_hash.png)
 
 After a second look into the results obtained from `linpeas.sh`, I found some autologin credentials.
@@ -87,7 +90,6 @@ After a second look into the results obtained from `linpeas.sh`, I found some au
 Great! I can now SSH to user with the credentials!
 
 ![ssh-katie](../assets/202106_htb_spectra/9_ssh_successful.png)
-![local.txt](../assets/202106_htb_spectra/10_local.png)
 
 ### Proof
 
@@ -127,4 +129,3 @@ sudo /sbin/initctl start test
 ```
 
 ![pe-vector](../assets/202106_htb_spectra/13_pe_vector.png)
-![proof.txt](../assets/202106_htb_spectra/14_proof.png)
