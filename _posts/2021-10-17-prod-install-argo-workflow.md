@@ -73,10 +73,14 @@ nginx -s reload
 
 ```bash
 # Find token name with naming convention of argo-server-token-*
-kubectl get secrets -n argo
-
 # View token stored in argo-server-token
-kubectl -n argo get secrets argo-server-token -o=jsonpath="{.data.token}" | base64 -d; echo
+kubectl get secrets -n argo
+kubectl -n argo get secrets argo-server-token-xxx -o=jsonpath="{.data.token}" | base64 -d; echo
+
+# OR
+# Find token name with naming convention of argo-server-*-*
+kubectl -n argo get pods
+kubectl -n argo exec argo-server-yyy-zzz -- argo auth token
 ```
 
 To view workflows within the browser, you should insert the base64-decoded token as `Bearer <JWT_TOKEN_VALUE>` into the input box at the UI dashboard.
@@ -86,8 +90,15 @@ To view workflows within the browser, you should insert the base64-decoded token
 ### Step 5: Configure Argo artifact repository
 
 ```bash
-# Assuming that helm is already pre-installed
-# Install MinIO in a new namespace: argo-minio
+# Install helm via official instructions
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+# Install Minio in a new namespace: argo-minio
+kubectl create namespace argo-minio
+helm repo add minio https://helm.min.io/
+helm repo update
 helm install argo-artifacts minio/minio --set service.type=ClusterIP --set fullnameOverride=argo-artifacts --namespace argo-minio
 
 # Obtain credentials for Minio UI

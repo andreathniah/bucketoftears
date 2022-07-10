@@ -53,19 +53,23 @@ cat /etc/hostname
 	master
 ```
 
-**Step 2. Install `kubeadm`, `kubectl` and `kubelet` tools into _each machine_**
+**Step 2. Install `docker`, `docker-compose`, `kubeadm`, `kubectl` and `kubelet` tools into _each machine_**
 
 ```bash
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl
 
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo apt install -y python3-pip
+sudo pip3 install docker-compose
 
 # In some circumstances, docker service is not enabled
 sudo systemctl enable docker
@@ -84,7 +88,7 @@ docker rm -f $(docker ps -aq)
 # Delete old network settings created by Flannel -- ONLY IF SERVER WAS PREVIOUSLY USING FLANNEL
 ip link del cni0
 ip link del flannel.1
-systemctl restart NetworkManager
+systemctl restart NetworkManager	# OR systemctl restart systemd-networkd
 echo 1 > /proc/sys/net/ipv4/ip_forward
 ```
 
@@ -119,6 +123,11 @@ Note that the values of the initialization command are decided based on several 
 More often than not, `pod-network-cidr` and `service-cidr` can remain as `172.24.0.0/16` and `172.25.0.0/16` respectively since they are internal IP addresses and are isolated from other servers hosting services.
 
 ```bash
+# Ensure runtime service and swap setting is correct
+rm /etc/containerd/config.toml
+systemctl restart containerd
+swapoff -a
+
 # Initialize a Kubernetes control-plane node
 # Note that 10.x.x.x is the internal IP address of master node
 kubeadm init --control-plane-endpoint=control-plane \
@@ -129,10 +138,6 @@ kubeadm init --control-plane-endpoint=control-plane \
 
 # Apply Kubernetes configuration
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /root/.bashrc
-
-# Disable swap -- ONLY IF SWAP ERROR OCCURS
-# 	[ERROR Swap]: running with swap on is not supported.
-swapoff -a
 
 # Change Docker driver -- ONLY IF KUBELET COMPLAINS ABOUT CGROUP DRIVER MISCONFIGURATION
 # 	Failed to run kubelet" err="failed to run Kubelet: misconfiguration:
@@ -196,6 +201,11 @@ kubeadm token create --print-join-command
 # Reset any existing kubernetes setup within the machine
 kubeadm reset
 rm -rf /etc/cni/net.d/
+
+# Ensure runtime service and swap setting is correct
+rm /etc/containerd/config.toml
+systemctl restart containerd
+swapoff -a
 
 # Command obtained from token creation command at master node
 # Note that 10.y.y.y is the internal IP address of worker node
