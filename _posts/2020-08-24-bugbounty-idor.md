@@ -50,19 +50,19 @@ Yes, these are Personal Identifiable Information (PII). And yes, I got cool swag
 
    A closer look at the XHRs executed would reveal an interesting query `/api/█████?id=Alice&action=██████████` with a 200 response.
 
-   ```
+   ```json
    { "result": "SUCCESS", "█████": [], "██████████": "" }
    ```
 
 2. Manipulate this query by changing `id` parameter to a non-existent user, `@Charlie`. A 400 response will be returned, informing me that the user specified is no longer a user.
 
-   ```
+   ```json
    { "result": "ERROR", "code": "███", "message": "Charlie is no longer a member." }
    ```
 
 3. Digging further, I replaced `id` parameter with another random user that `@Alice` has access to, `@Dave`. Jackpot! Sensitive data was dumped in full clear-text 👀
 
-   ```
+   ```json
    { "result": "SUCCESS",
      "█████": [{
      		   ...
