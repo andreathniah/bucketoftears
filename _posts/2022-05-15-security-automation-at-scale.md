@@ -20,11 +20,13 @@ Anyway.
 
 One thing I noticed while hunting for bugs is that there are heck lots of companies that use Google OAuth as their primary set of first-layer authorization controls. This model makes sense for companies that has tons of subsidiaries (each with different domains) under their umbrella. Unfortunately, due to the sheer amount of domain prefixes they have to cater to, the regex expression used to ensure login-able email addresses are scoped to company-owned domains are weak.
 
-The process of checking if endpoints are vulnerable to this bug is fairly straight-forward:
+The process of checking if endpoints are vulnerable to this bug is fairly straight-forward.
 
-- Check if the endpoint allows login via Google OAuth
-- Check if endpoint allows login via tampered accounts like `@company.com.attacker.com`
-- Check if endpoint allows tampered accounts to view data
+Consider an endpoint which only allows accounts of the following email address to login: `@companyA1.com`, `@companyA2.com`; to check if the site is vulnerable:
+
+1. Check if the endpoint allows login via Google OAuth
+2. Check if endpoint allows login via tampered accounts like `@companyA1.com.attacker.com`
+3. Check if endpoint allows tampered accounts to view data
 
 This is certainly simple when you only have one endpoint, but what happens when you have >1000 to check against? Or god-forbid, if you have to do the same set of checks on a regular basis?
 
@@ -71,6 +73,6 @@ Here's a peek into how the entire pipeline looks like!
 
 Although I am rather worried if it's "sneaky" enough, I think the tool worked pretty well all things considered. It was able to **scan nearly 80K endpoints under 4 hours** and netted me entry to **~10 admin portal endpoints** with varying degrees of viewable data. For someone who had never delivered a non-school related product, I am quite proud of how `v1.0.0` turned out. Of course, as a bug bounty hunter, I would have preferred to net more "hits", but it's certainly better than nothing!
 
-In the next installation of this series, I will be sharing how I was able to escalate from this authentication bypass bug to obtaining PIIs for one of the juicy endpoints.
+In the [next installation](../2022-06-05/security-automation-escalation) of this series, I will be sharing how I was able to escalate from this authentication bypass bug to obtaining PIIs for one of the juicy endpoints.
 
 See you there!
