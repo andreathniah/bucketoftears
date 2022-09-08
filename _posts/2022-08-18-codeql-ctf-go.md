@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "CodeQL - Learning to Write Customized Queries #1"
+title: "CodeQL - Exploring the Terrain #1"
 author: "BoT"
 tags: "writeup codeql"
 excerpt_separator: <!--more-->
