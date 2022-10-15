@@ -20,9 +20,9 @@ The story starts when I was checking out new assets flagged by my trusty authent
 
 As established in my [series on security automation](../2022-05-15/security-automation-at-scale), the affected target, a financial dashboard, allows non-company email addresses to login via Google OAuth. In fact, I could login with any `@gmail.com` account!
 
-While no meaningful data were visible from the dashboard, I was undaunted as there may have endpoints that neglected to check for authentication. With that in mind, I turned to look into the various JavaScript chunk files loaded during the login process.
+While no meaningful data were visible from the dashboard, I was undaunted as there may be endpoints that neglected to check for authentication. With that in mind, I turned to look into the various JavaScript chunk files loaded during the login process.
 
-Learning from my previous (torturous) experience with chunk files, instead of slowly looking at the file and attempt to decipher what was needed -- query parameters, JSON structure for POST, etc -- I opted to just say _"fuck it"_ and collate a list of endpoints via regex, dump them into Burpsuite and set Intruder to run the payloads as GET request regardless of its intended HTTP method.
+Learning from my previous (torturous) experience with chunk files, instead of slowly looking at the file and attempting to decipher what was needed -- query parameters, JSON structure for POST, etc -- I opted to just say _"fuck it"_ and collate a list of endpoints via regex, dump them into Burpsuite and set Intruder to run the payloads as GET request regardless of its intended HTTP method.
 
 The best lazy decision of my life.
 
@@ -36,7 +36,7 @@ Interesting.
 
 Weirdly enough, the endpoint returned with a `500 Internal Server Error` when I added one of defined the parameters. Poking more into the code snippet revealed that for some reason, the endpoint requires either _none_ or _all_ of its query parameters to be included.
 
-Unfortunately, solving this puzzle didn't yield any different results -- it still returns an empty excel spreadsheet -- because I didn't had the right values for the query parameters.
+Unfortunately, solving this puzzle didn't yield me with different results -- it is still an empty excel spreadsheet -- because I didn't have the right values for the query parameters.
 
 Grr 😡
 
@@ -48,11 +48,11 @@ Could this be an SQLi?
 
 Spoiler alert, it totally was!
 
-The first payload I tried was `123) OR 1=1) --` and to my excitement, I got back a `200 OK` response and a freshly downloaded spreadsheet.
+The first payload I tried was `123) OR 1=1) --` and to my excitement, I got back a `200 OK` response along with a freshly downloaded spreadsheet.
 
 Ohhhh yeah! Time to dump the entire database!
 
-Instead of using automated tools like `sqlmap`, I decided to manually craft out the necessary payloads in order to minimize chances of triggering any alerts. Do note that these payload were all adapted from PortSwigger Web Academy [SQL Injection](https://portswigger.net/web-security/sql-injection) chapter, so do check them out if you are new to SQLi.
+Instead of using automated tools like `sqlmap`, I decided to manually craft out the necessary payloads in order to minimize chances of triggering any alerts. Note that these payload were all adapted from PortSwigger Web Academy [SQL Injection](https://portswigger.net/web-security/sql-injection) chapter, so do check them out if you are new to SQLi.
 
 Anyway, here's an overview of what I did:
 
@@ -80,7 +80,7 @@ Anyway, here's an overview of what I did:
     ') union select <COLUMN_1>,<COLUMN_2>,<COLUMN_3>,<COLUMN_4>,<COLUMN_5> from <TABLE_NAME>-- -
     ```
 
-One annoying thing about SQLi this application is that the results are reflected only in the downloaded spreadsheets. This meant that I had to open up each one of them for every payload I attempted. I'll admit I was so exasperated that I ended up automating this process through Burpsuite by dumping the list of payload into Intruder and letting it work its magic.
+One annoying thing about SQLi in this application is that the results are reflected only in the downloaded spreadsheets. This meant that I had to open up each one of them for every payload I attempted. I'll admit I was so exasperated that I ended up automating this process through Burpsuite by dumping the list of payload into Intruder and letting it work its magic.
 
 Automation FTW 🤓
 
