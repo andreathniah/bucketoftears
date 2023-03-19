@@ -6,7 +6,7 @@ tags: "bugbounty"
 excerpt_separator: <!--more-->
 ---
 
-In order words: how to not get c\*\*k-blocked by CORS.
+In other words: how to not get c\*\*k-blocked by CORS.
 
 <!--more-->
 
